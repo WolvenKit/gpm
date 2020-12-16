@@ -22,9 +22,9 @@ jobs:
           go get
       - name: Run build
         run: |
-        cd ./cmd/gpm
-        go build
+          cd ./cmd/gpm
+          go build
       - name: Run testing
         run: |
-        cd ./test
-        go test -v
+          cd ./test
+          go test -v

@@ -8,7 +8,10 @@ test: ## Test the project
 lint: ## Lint the project
 	go fmt
 
-build: ## Build & Install as a binary to the PATH
+build: ## Build the project
+	go build
+
+install: ## Build & Install as a binary to the PATH
 	go install
 
 help: ## Show this help

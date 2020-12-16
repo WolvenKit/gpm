@@ -1,3 +1,6 @@
+### gpm ###
+/cmd/gpm/gpm
+
 ### Go ###
 # Binaries for programs and plugins
 *.exe

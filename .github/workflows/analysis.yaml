@@ -1,0 +1,23 @@
+name: Analysis
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.15.4'
+      - name: Go Version
+        run: go version
+      - name: Run build
+        run: make build
+      - name: Run tests
+        run: make test

@@ -18,11 +18,13 @@ jobs:
       - name: Install dependencies
         run: |
           go version
+          cd ./cmd/gpm
           go get
       - name: Run build
-        run: go build
-      - name: Run linter
         run: |
-          go fmt
+        cd ./cmd/gpm
+        go build
       - name: Run testing
-        run: cd test && go test -v
+        run: |
+        cd ./test
+        go test -v

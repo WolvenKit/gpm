@@ -1,7 +1,3 @@
-
-# Created by https://www.toptal.com/developers/gitignore/api/go,macos,windows,intellij
-# Edit at https://www.toptal.com/developers/gitignore?templates=go,macos,windows,intellij
-
 ### Go ###
 # Binaries for programs and plugins
 *.exe
@@ -26,5 +22,3 @@
 ### Intellij
 *.iml
 .idea
-
-# End of https://www.toptal.com/developers/gitignore/api/go

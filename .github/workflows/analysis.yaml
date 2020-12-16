@@ -15,16 +15,11 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: '1.15.4'
+      - name: Go Version
+        run: go version
       - name: Install dependencies
-        run: |
-          go version
-          cd ./cmd/gpm
-          go get
+        run: go get
       - name: Run build
-        run: |
-          cd ./cmd/gpm
-          go build
+        run: go build
       - name: Run testing
-        run: |
-          cd ./test
-          go test -v
+        run: cd ./test && go test -v

@@ -1,2 +1,3 @@
 # gpm
-gpm or Game Package Manager is a tool for downloading, installing, uninstalling, building, and publishing mod packages
+
+GPM (Game Package Manager) is a tool for managing and publishing mod packages.

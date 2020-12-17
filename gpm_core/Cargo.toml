@@ -5,3 +5,10 @@ edition = "2018"
 
 [dependencies]
 anyhow = "1.0.35"
+thiserror = "1.0.22"
+serde = {version="1.0.118", features=["derive"]}
+toml = "0.5.7"
+ignore = "0.4.17" # as in gitignore
+zip = "0.5.9"
+walkdir = "2"
+serde_json = "1.0.60"

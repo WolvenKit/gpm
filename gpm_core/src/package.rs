@@ -27,7 +27,7 @@ pub struct PackageInformation {
 
     // optional values
     pub website_url: Option<String>,
-    pub dependencies: Vec<u8>,
+    pub dependencies: Vec<String>,
     pub tags: Vec<String>,
     pub install_strategies: Vec<String>,
     pub extra_data: Vec<PackageInformationExtraData>,

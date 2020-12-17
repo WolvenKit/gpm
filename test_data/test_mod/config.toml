@@ -1,0 +1,6 @@
+identifier = "test_mod"
+display_name = "Test Mod"
+creator = "modder"
+description = "A simple test mod"
+version = "0.0.0"
+license = "MIT"

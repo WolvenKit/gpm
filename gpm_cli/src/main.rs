@@ -1,7 +1,3 @@
-extern crate clap;
-extern crate games_package_manager;
-extern crate termcolor;
-
 use clap::{App, SubCommand};
 use std::result::Result;
 

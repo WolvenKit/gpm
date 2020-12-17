@@ -48,12 +48,20 @@ dependencies = [
 ]
 
 [[package]]
-name = "games_package_manager"
+name = "gpm_cli"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
+ "gpm_core",
  "termcolor",
+]
+
+[[package]]
+name = "gpm_core"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
 ]
 
 [[package]]

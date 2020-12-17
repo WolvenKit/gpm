@@ -83,6 +83,10 @@ pub fn create_package<D: Write + Seek>(
             )
         })?;
 
+        if content_rel_path == PathBuf::from(JSON_CONFIG_PATH) {
+            continue;
+        };
+
         let is_file = entry.file_type().is_file();
 
         if let Some(ignore) = &ignore {

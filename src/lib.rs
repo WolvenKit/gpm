@@ -1,5 +1,3 @@
 mod gpm;
 
-pub use gpm::{
-  package
-};
+pub use gpm::package;

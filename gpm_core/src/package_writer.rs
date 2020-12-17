@@ -3,10 +3,10 @@ use std::io;
 use std::io::{ErrorKind, Read, Seek, Write};
 use std::path::{Path, PathBuf};
 
+use crate::constants::{IGNORE_PATH, JSON_CONFIG_PATH};
 use crate::store_project::{
     get_project_config_json, load_package_from_project, LoadPackageFromProjectError,
 };
-use crate::{IGNORE_PATH, JSON_CONFIG_PATH};
 
 use walkdir::WalkDir;
 use zip::{

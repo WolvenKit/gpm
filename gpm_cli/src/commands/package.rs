@@ -1,6 +1,7 @@
 use gpm_core::package_writer::{create_package, CreatePackageError};
 use std::fs::File;
 use std::io;
+use std::io::BufWriter;
 use std::path::PathBuf;
 
 pub struct PackageParameter {
@@ -17,9 +18,10 @@ pub enum PackageError {
 }
 
 pub fn package(parameter: PackageParameter) -> Result<(), PackageError> {
-    let mut destination_file = File::create(&parameter.output_file).map_err(|err| {
-        PackageError::CreateDestinationError(parameter.output_file.to_path_buf(), err)
-    })?;
+    let mut destination_file =
+        BufWriter::new(File::create(&parameter.output_file).map_err(|err| {
+            PackageError::CreateDestinationError(parameter.output_file.to_path_buf(), err)
+        })?);
     create_package(&parameter.input_dir, &mut destination_file)?;
     Ok(())
 }

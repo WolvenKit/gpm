@@ -12,3 +12,4 @@ ignore = "0.4.17" # as in gitignore
 zip = "0.5.9"
 walkdir = "2"
 serde_json = "1.0.60"
+console = "0.13.0"

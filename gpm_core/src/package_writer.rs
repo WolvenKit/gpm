@@ -4,6 +4,7 @@ use std::io::{ErrorKind, Read, Seek, Write};
 use std::path::{Path, PathBuf};
 
 use crate::constants::{IGNORE_PATH, JSON_CONFIG_PATH};
+use crate::display::list::format_str_id_list;
 use crate::store_project::{
     get_project_config_json, load_package_from_project, LoadPackageFromProjectError,
 };
@@ -35,6 +36,8 @@ pub enum CreatePackageError {
     EncodeJsonError(#[source] serde_json::error::Error),
     #[error("error while handling the ignore file")] // this one should include path
     IgnoreFileError(#[from] ignore::Error),
+    #[error("can't get all the required field for packaging the mod : {0}")]
+    MissingPublishFieldError(String), //formatted missing field
 }
 
 pub fn create_package<D: Write + Seek>(
@@ -44,6 +47,13 @@ pub fn create_package<D: Write + Seek>(
     // load the package
     let package = load_package_from_project(&input_dir)
         .map_err(|err| CreatePackageError::LoadPackageError(input_dir.to_path_buf(), err))?;
+
+    let missing_publish_field = package.information.missing_publish_field();
+    if !missing_publish_field.is_empty() {
+        return Err(CreatePackageError::MissingPublishFieldError(
+            format_str_id_list(&missing_publish_field),
+        ));
+    };
 
     //load the ignore file
     let ignore_path = input_dir.join(IGNORE_PATH);

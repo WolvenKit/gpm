@@ -10,12 +10,18 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 struct StoredPackageInformation {
-    creator: String,
-    identifier: String,
-    version: String,
-    display_name: String,
-    description: String,
-    license: String,
+    #[serde(default)]
+    creator: Option<String>,
+    #[serde(default)]
+    identifier: Option<String>,
+    #[serde(default)]
+    version: Option<String>,
+    #[serde(default)]
+    display_name: Option<String>,
+    #[serde(default)]
+    description: Option<String>,
+    #[serde(default)]
+    license: Option<String>,
 
     #[serde(default)]
     website_url: Option<String>,

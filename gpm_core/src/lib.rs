@@ -1,3 +1,4 @@
+pub mod display;
 pub mod package;
 pub mod package_writer;
 pub mod store_project;

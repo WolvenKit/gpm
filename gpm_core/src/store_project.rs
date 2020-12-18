@@ -1,10 +1,10 @@
 use std::fs::File;
 use std::io;
-use std::io::Read;
+use std::io::{BufReader, Read};
 use std::path::{Path, PathBuf};
 
+use crate::constants::TOML_CONFIG_PATH;
 use crate::package::{Package, PackageInformation, PackageInformationExtraData};
-use crate::TOML_CONFIG_PATH;
 
 use serde::{Deserialize, Serialize};
 
@@ -88,8 +88,10 @@ pub fn load_package_from_project(
     project_path: &Path,
 ) -> Result<Package, LoadPackageFromProjectError> {
     let config_path = project_path.join(TOML_CONFIG_PATH);
-    let mut config_file = File::open(&config_path)
-        .map_err(|err| LoadPackageFromProjectError::FileIOError(config_path.to_path_buf(), err))?;
+    let mut config_file =
+        BufReader::new(File::open(&config_path).map_err(|err| {
+            LoadPackageFromProjectError::FileIOError(config_path.to_path_buf(), err)
+        })?);
     let mut config_content = Vec::new();
     config_file
         .read_to_end(&mut config_content)

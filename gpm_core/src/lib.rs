@@ -1,4 +1,5 @@
 pub mod display;
+pub mod lockfile;
 pub mod package;
 pub mod package_writer;
 pub mod store_project;

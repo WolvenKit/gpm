@@ -135,3 +135,21 @@ pub fn create_package<D: Write + Seek>(
         .map_err(CreatePackageError::ZipWriteError)?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::package_writer::create_package;
+    use std::io::Cursor;
+    use std::path::PathBuf;
+
+    #[test]
+    fn test_create_package() {
+        let test_mod = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap()
+            .join("test_data")
+            .join("test_mod");
+        let mut buffer = Cursor::new(vec![0u8; 1_000_000]); //1Mo should be enought
+        create_package(&test_mod, &mut buffer).unwrap();
+    }
+}

@@ -3,10 +3,11 @@ use std::io;
 use std::io::{ErrorKind, Read, Seek, Write};
 use std::path::{Path, PathBuf};
 
+use crate::constants::{IGNORE_PATH, JSON_CONFIG_PATH};
+use crate::display::list::format_str_id_list;
 use crate::store_project::{
     get_project_config_json, load_package_from_project, LoadPackageFromProjectError,
 };
-use crate::{IGNORE_PATH, JSON_CONFIG_PATH};
 
 use walkdir::WalkDir;
 use zip::{
@@ -35,6 +36,8 @@ pub enum CreatePackageError {
     EncodeJsonError(#[source] serde_json::error::Error),
     #[error("error while handling the ignore file")] // this one should include path
     IgnoreFileError(#[from] ignore::Error),
+    #[error("can't get all the required field for packaging the mod : {0}")]
+    MissingPublishFieldError(String), //formatted missing field
 }
 
 pub fn create_package<D: Write + Seek>(
@@ -44,6 +47,13 @@ pub fn create_package<D: Write + Seek>(
     // load the package
     let package = load_package_from_project(&input_dir)
         .map_err(|err| CreatePackageError::LoadPackageError(input_dir.to_path_buf(), err))?;
+
+    let missing_publish_field = package.information.missing_publish_field();
+    if !missing_publish_field.is_empty() {
+        return Err(CreatePackageError::MissingPublishFieldError(
+            format_str_id_list(&missing_publish_field),
+        ));
+    };
 
     //load the ignore file
     let ignore_path = input_dir.join(IGNORE_PATH);
@@ -124,4 +134,22 @@ pub fn create_package<D: Write + Seek>(
     zip.write_all(&config_json)
         .map_err(CreatePackageError::ZipWriteError)?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::package_writer::create_package;
+    use std::io::Cursor;
+    use std::path::PathBuf;
+
+    #[test]
+    fn test_create_package() {
+        let test_mod = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap()
+            .join("test_data")
+            .join("test_mod");
+        let mut buffer = Cursor::new(vec![0u8; 1_000_000]); //1Mo should be enought
+        create_package(&test_mod, &mut buffer).unwrap();
+    }
 }

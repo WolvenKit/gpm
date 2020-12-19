@@ -126,3 +126,33 @@ impl Package {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::package::PackageInformation;
+
+    #[test]
+    fn test_publish_field() {
+        let mut package_information = PackageInformation::new(
+            "a creator",
+            "an_identifier",
+            "1.2.3",
+            "A Display Name",
+            "the description of this is a description",
+            "some version of AGPL",
+        );
+
+        assert!(package_information.missing_publish_field().is_empty());
+        let required_publish_information =
+            package_information.required_publish_information().unwrap();
+        assert_eq!(&required_publish_information.version, "1.2.3");
+
+        package_information.version = None;
+        package_information.display_name = None;
+        let missing_publish_field = package_information.missing_publish_field();
+        assert!(missing_publish_field.contains(&"version"));
+        assert!(missing_publish_field.contains(&"display_name"));
+        assert_eq!(missing_publish_field.len(), 2);
+        assert!(package_information.required_publish_information().is_none());
+    }
+}

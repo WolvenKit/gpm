@@ -19,7 +19,7 @@ pub enum LockSource {
     Path { path: PathBuf },
 }
 
-/// contain a fixed set of mod depency, with each depency having a specific version. Mod are
+/// contain a fixed set of mod dependency, with each dependency having a specific version. Mod are
 /// identified by their id. They are unique.
 #[derive(Serialize, Deserialize, Default, Debug)]
 pub struct LockFile {
@@ -34,14 +34,14 @@ impl LockFile {
 
     /// return the [`LockSource`] corresponding to a given package identifier if it is present in
     /// this [`LockFile`], None otherwise.
-    pub fn depency_source(&self, identifier: &str) -> Option<LockSource> {
+    pub fn dependency_source(&self, identifier: &str) -> Option<LockSource> {
         self.dependencies.get(identifier).cloned()
     }
 
     /// define the [`LockSource`] for a given package identifier, overwriting the current one.
     ///
     /// return the previous [`LockSource`] if overwriting it
-    pub fn set_depency_source(
+    pub fn set_dependency_source(
         &mut self,
         identifier: String,
         source: LockSource,
@@ -50,12 +50,14 @@ impl LockFile {
     }
 
     /// remove the mod with the given id. Return the previous entry if it exist, None otherwise.
-    pub fn remove_depency_source(&mut self, identifier: &str) -> Option<LockSource> {
+    pub fn remove_dependency_source(&mut self, identifier: &str) -> Option<LockSource> {
         self.dependencies.remove(identifier)
     }
 
     /// iterate over all the locked dependancies
-    pub fn iter_depency_source(&self) -> std::collections::hash_map::Iter<'_, String, LockSource> {
+    pub fn iter_dependency_source(
+        &self,
+    ) -> std::collections::hash_map::Iter<'_, String, LockSource> {
         self.dependencies.iter()
     }
 
@@ -98,23 +100,23 @@ mod tests {
             version: "1.0.0".into(),
         };
         let mut lock_file = LockFile::new();
-        assert!(lock_file.depency_source("package1").is_none());
+        assert!(lock_file.dependency_source("package1").is_none());
         assert!(lock_file
-            .set_depency_source("package1".into(), package1_source.clone())
+            .set_dependency_source("package1".into(), package1_source.clone())
             .is_none());
         assert!(lock_file
-            .iter_depency_source()
+            .iter_dependency_source()
             .map(|(k, _)| k)
             .collect::<Vec<_>>()
             .contains(&&"package1".to_string()));
         assert_eq!(
-            lock_file.depency_source("package1"),
+            lock_file.dependency_source("package1"),
             Some(package1_source.clone())
         );
         assert_eq!(
-            lock_file.remove_depency_source("package1"),
+            lock_file.remove_dependency_source("package1"),
             Some(package1_source)
         );
-        assert!(lock_file.remove_depency_source("package1").is_none());
+        assert!(lock_file.remove_dependency_source("package1").is_none());
     }
 }

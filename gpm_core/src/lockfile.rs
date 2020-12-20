@@ -49,6 +49,16 @@ impl LockFile {
         self.dependencies.insert(identifier, source)
     }
 
+    /// remove the mod with the given id. Return the previous entry if it exist, None otherwise.
+    pub fn remove_depency_source(&mut self, identifier: &str) -> Option<LockSource> {
+        self.dependencies.remove(identifier)
+    }
+
+    /// iterate over all the locked dependancies
+    pub fn iter_depency_source(&self) -> std::collections::hash_map::Iter<'_, String, LockSource> {
+        self.dependencies.iter()
+    }
+
     //TODO: do we want to store them as JSON or as TOML ?
     /// load the lock file from input JSON stream
     pub fn load_reader<T: Read>(input: &mut T) -> serde_json::Result<Self> {
@@ -83,10 +93,28 @@ mod tests {
 
     #[test]
     fn test_lock_file() {
-        let package1_source = LockSource::IdVersion { identifier: "package1_bis".into(), version:"1.0.0".into()};
+        let package1_source = LockSource::IdVersion {
+            identifier: "package1_bis".into(),
+            version: "1.0.0".into(),
+        };
         let mut lock_file = LockFile::new();
         assert!(lock_file.depency_source("package1").is_none());
-        assert!(lock_file.set_depency_source("package1".into(), package1_source.clone()).is_none());
-        assert_eq!(lock_file.depency_source("package1"), Some(package1_source));
+        assert!(lock_file
+            .set_depency_source("package1".into(), package1_source.clone())
+            .is_none());
+        assert!(lock_file
+            .iter_depency_source()
+            .map(|(k, _)| k)
+            .collect::<Vec<_>>()
+            .contains(&&"package1".to_string()));
+        assert_eq!(
+            lock_file.depency_source("package1"),
+            Some(package1_source.clone())
+        );
+        assert_eq!(
+            lock_file.remove_depency_source("package1"),
+            Some(package1_source)
+        );
+        assert!(lock_file.remove_depency_source("package1").is_none());
     }
 }

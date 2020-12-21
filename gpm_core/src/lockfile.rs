@@ -61,15 +61,21 @@ impl LockFile {
         self.dependencies.iter()
     }
 
-    //TODO: do we want to store them as JSON or as TOML ?
-    /// load the lock file from input JSON stream
-    pub fn load_reader<T: Read>(input: &mut T) -> serde_json::Result<Self> {
-        serde_json::from_reader(input)
+    /// load the lock file from input TOML stream
+    pub fn load_reader<T: Read>(input: &mut T) -> Result<Self, anyhow::Error> {
+        let mut buffer = Vec::new();
+        input
+            .read_to_end(&mut buffer)
+            .context("can't load the input file in memory")?;
+        toml::from_slice(&buffer).context("can't parse the TOML lock file")
     }
 
-    /// write this [`LockFile`] to the output stream (JSON)
-    pub fn write_writer<T: Write>(&self, output: &mut T) -> serde_json::Result<()> {
-        serde_json::to_writer_pretty(output, self)
+    /// write this [`LockFile`] to the output stream (TOML)
+    pub fn write_writer<T: Write>(&self, output: &mut T) -> Result<(), anyhow::Error> {
+        let buffer = toml::to_vec(&self).context("can't encode the TOML lock file")?;
+        output
+            .write_all(&buffer)
+            .context("can't push the encoded file")
     }
 
     /// load a [`LockFile`] from the given file
@@ -77,7 +83,7 @@ impl LockFile {
         let mut file =
             File::open(path).with_context(|| format!("can't open the lock file at {:?}", &path))?;
         Ok(Self::load_reader(&mut file)
-            .with_context(|| format!("can't load the JSON lock file at {:?}", &path))?)
+            .with_context(|| format!("can't load the TOML lock file at {:?}", &path))?)
     }
 
     /// write this [`LockFile`] to the given file
@@ -85,7 +91,7 @@ impl LockFile {
         let mut file = File::create(&path)
             .with_context(|| format!("can't create the lock file at {:?}", &path))?;
         Ok(Self::write_writer(&self, &mut file)
-            .with_context(|| format!("can't write the JSON lock file at {:?}", &path))?)
+            .with_context(|| format!("can't write the TOML lock file at {:?}", &path))?)
     }
 }
 

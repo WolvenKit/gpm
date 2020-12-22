@@ -1,6 +1,8 @@
+pub mod config;
 pub mod display;
 pub mod package;
 pub mod package_writer;
+pub mod remote;
 pub mod store_project;
 
 pub mod constants {

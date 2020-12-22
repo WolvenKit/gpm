@@ -1,6 +1,6 @@
 use anyhow::Context;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::collections::HashSet;
 use std::fs::File;
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
@@ -20,10 +20,10 @@ pub enum LockSource {
 }
 
 /// contain a fixed set of mod dependency, with each dependency having a specific version. Mod are
-/// identified by their id. They are unique.
+/// identified by their id. They are unique. They are also ordered.
 #[derive(Serialize, Deserialize, Default, Debug)]
 pub struct LockFile {
-    pub dependencies: HashMap<String, LockSource>,
+    dependencies: Vec<(String, LockSource)>,
 }
 
 impl LockFile {
@@ -32,42 +32,93 @@ impl LockFile {
         Self::default()
     }
 
+    /// remove duplicated dependency.
+    fn dedup(&mut self) {
+        let mut already_present: HashSet<String> = HashSet::new();
+        let mut to_remove: Vec<usize> = Vec::new();
+        for (count, (source_id, _)) in self.dependencies.iter().enumerate() {
+            if already_present.contains(source_id) {
+                to_remove.push(count);
+            } else {
+                already_present.insert(source_id.clone());
+            }
+        }
+
+        for remove_id in to_remove.iter().rev() {
+            self.dependencies.remove(*remove_id);
+        }
+    }
+
     /// return the [`LockSource`] corresponding to a given package identifier if it is present in
     /// this [`LockFile`], None otherwise.
     pub fn dependency_source(&self, identifier: &str) -> Option<LockSource> {
-        self.dependencies.get(identifier).cloned()
+        Some(
+            self.dependencies[self.dependency_source_position(identifier)?]
+                .1
+                .clone(),
+        )
+    }
+
+    /// return the numerical position of the given [`LockSource`], or None if not present.
+    pub fn dependency_source_position(&self, identifier: &str) -> Option<usize> {
+        for (count, (actual_id, _)) in self.dependencies.iter().enumerate() {
+            if actual_id == identifier {
+                return Some(count);
+            }
+        }
+        None
     }
 
     /// define the [`LockSource`] for a given package identifier, overwriting the current one.
     ///
-    /// return the previous [`LockSource`] if overwriting it
-    pub fn set_dependency_source(
-        &mut self,
-        identifier: String,
-        source: LockSource,
-    ) -> Option<LockSource> {
-        self.dependencies.insert(identifier, source)
+    /// If the mod identifier is already present, only change the source. If it isn't present,
+    /// add it at the end of the dependancies. This allow to check, that, if dependencies are added
+    /// before the dependent, it dependancies are loaded after the dependent whatever happen.
+    /// A potential issue is:
+    /// 1. for circular dependency (won't detect them, but shouldn't happen in a first time)
+    /// 2. A dependency is added to one package. We would need to re-add every package for this,
+    /// respecting the order. One possibility would be to create a new [`LockFile`] respecting the
+    /// add order, but keeping the [`LockSource`] of the original lock file if existing.
+    pub fn add_dependency(&mut self, identifier: String, source: LockSource) {
+        if let Some(position) = self.dependency_source_position(&identifier) {
+            self.dependencies[position] = (identifier, source);
+        } else {
+            self.dependencies.push((identifier, source));
+        }
     }
 
     /// remove the mod with the given id. Return the previous entry if it exist, None otherwise.
     pub fn remove_dependency_source(&mut self, identifier: &str) -> Option<LockSource> {
-        self.dependencies.remove(identifier)
+        let mut to_remove = None;
+        for (count, (actual_id, _)) in self.dependencies.iter().enumerate() {
+            if actual_id == identifier {
+                to_remove = Some(count);
+            };
+        }
+        if let Some(remove_id) = to_remove {
+            Some(self.dependencies.remove(remove_id).1)
+        } else {
+            None
+        }
     }
 
-    /// iterate over all the locked dependancies
-    pub fn iter_dependency_source(
+    /// iterate over all the locked dependancies, in order
+    pub fn iter_dependencies_source(
         &self,
-    ) -> std::collections::hash_map::Iter<'_, String, LockSource> {
+    ) -> std::slice::Iter<'_, (std::string::String, LockSource)> {
         self.dependencies.iter()
     }
 
-    /// load the lock file from input TOML stream
+    /// load the lock file from input TOML stream (entrys are deduplicated if necessary)
     pub fn load_reader<T: Read>(input: &mut T) -> Result<Self, anyhow::Error> {
         let mut buffer = Vec::new();
         input
             .read_to_end(&mut buffer)
             .context("can't load the input file in memory")?;
-        toml::from_slice(&buffer).context("can't parse the TOML lock file")
+        let mut result =
+            toml::from_slice::<Self>(&buffer).context("can't parse the TOML lock file")?;
+        result.dedup();
+        Ok(result)
     }
 
     /// write this [`LockFile`] to the output stream (TOML)
@@ -107,11 +158,9 @@ mod tests {
         };
         let mut lock_file = LockFile::new();
         assert!(lock_file.dependency_source("package1").is_none());
+        lock_file.add_dependency("package1".into(), package1_source.clone());
         assert!(lock_file
-            .set_dependency_source("package1".into(), package1_source.clone())
-            .is_none());
-        assert!(lock_file
-            .iter_dependency_source()
+            .iter_dependencies_source()
             .map(|(k, _)| k)
             .collect::<Vec<_>>()
             .contains(&&"package1".to_string()));

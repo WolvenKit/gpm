@@ -12,6 +12,7 @@ import (
     "github.com/stretchr/testify/assert"
     "io/ioutil"
     "log"
+    "os"
     "path/filepath"
     "testing"
 )
@@ -23,7 +24,7 @@ func testSandbox() string{
     }
     dir = filepath.FromSlash(fmt.Sprintf(dir))
 
-    //defer os.RemoveAll(dir)
+    defer os.RemoveAll(dir)
 
     return dir
 }

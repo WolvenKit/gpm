@@ -4,11 +4,11 @@
  Licensed under the GNU Affero General Public License v3.0 (the "License").
 */
 
-package cli
+package commands
 
 import (
-	"github.com/gruntwork-io/gruntwork-cli/entrypoint"
-	"github.com/urfave/cli/v2"
+    "github.com/gruntwork-io/gruntwork-cli/entrypoint"
+    "github.com/urfave/cli/v2"
 )
 
 var NAME = "gpm"
@@ -25,6 +25,7 @@ func InitCLI() *cli.App {
 	}
 
 	app.Version = VERSION
+    app.HideHelp = false
 
 	app.EnableBashCompletion = true
 
@@ -32,3 +33,4 @@ func InitCLI() *cli.App {
 
 	return app
 }
+

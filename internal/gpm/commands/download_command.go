@@ -4,7 +4,7 @@
  Licensed under the GNU Affero General Public License v3.0 (the "License").
 */
 
-package cli
+package commands
 
 import "github.com/urfave/cli/v2"
 
@@ -13,9 +13,9 @@ func downloadCommand() *cli.Command {
         Name:     "Download",
         Aliases:  []string{"d", "--download", "-d"},
         Usage:    "Download the specified mod",
-        Category: NAME,
+        Category: "Download",
         Action: func(context *cli.Context) error {
-            println(VERSION)
+            //DownloadMod()
             return nil
         },
     }
@@ -23,6 +23,6 @@ func downloadCommand() *cli.Command {
     return &command
 }
 
-func downloadMod(){
+func DownloadMod(game string, registry string, identifier string, version string ){
     // Downloads mod from the Mod Registry
 }

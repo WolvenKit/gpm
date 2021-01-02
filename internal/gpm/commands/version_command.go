@@ -4,7 +4,7 @@
  Licensed under the GNU Affero General Public License v3.0 (the "License").
 */
 
-package cli
+package commands
 
 import (
 	"github.com/urfave/cli/v2"

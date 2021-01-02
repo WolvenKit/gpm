@@ -7,14 +7,45 @@
 package main
 
 import (
-	"github.com/gruntwork-io/gruntwork-cli/entrypoint"
-
-	"github.com/WolvenKit/gpm/internal/gpm/cli"
+    "github.com/urfave/cli/v2"
+    "time"
 )
 
 func main() {
-	app := cli.InitCLI()
+    app := &cli.App{
+        Name:                   "gpm",
+        Version:                "0.0.0",
+        HelpName:               "",
+        Usage:                  "",
+        UsageText:              "",
+        ArgsUsage:              "",
+        Description:            "",
+        Commands:               nil,
+        Flags:                  nil,
+        EnableBashCompletion:   false,
+        HideHelp:               false,
+        HideHelpCommand:        false,
+        HideVersion:            false,
+        BashComplete:           nil,
+        Before:                 nil,
+        After:                  nil,
+        Action:                 nil,
+        CommandNotFound:        nil,
+        OnUsageError:           nil,
+        Compiled:               time.Time{},
+        Authors:                []*cli.Author{
+            {
+                Name: "osulli",
+            },
+        Copyright:              "",
+        Reader:                 nil,
+        Writer:                 nil,
+        ErrWriter:              nil,
+        ExitErrHandler:         nil,
+        Metadata:               nil,
+        ExtraInfo:              nil,
+        CustomAppHelpTemplate:  "",
+        UseShortOptionHandling: false,
+    }
 
-	// Use the entrypoint package, which takes care of exit codes, stack traces, and panics
-	entrypoint.RunApp(app)
 }

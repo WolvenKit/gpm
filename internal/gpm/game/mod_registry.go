@@ -6,5 +6,9 @@
 
 package game
 
-
-
+type ModRegistries struct {
+    Name string
+    WebsiteURL string
+    BaseURL string
+    FileTypes []string
+}

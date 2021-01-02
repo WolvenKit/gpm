@@ -1,4 +1,5 @@
 identifier = "cp77"
 display_name = "Cyberpunk 2077"
 install_strategies = ["CET"]
+registries = ["cybermods"]
 versions = ["1.06"]

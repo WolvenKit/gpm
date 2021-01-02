@@ -6,5 +6,13 @@
 
 package game
 
+type InstallStrategies struct {
+    Identifier string
+    DisplayName string
+    InstallationPath string
+}
 
-
+const (
+    zip = ".zip"
+    rar = ".rar"
+)

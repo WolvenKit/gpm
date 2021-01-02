@@ -18,7 +18,7 @@ type Mod struct {
     WebsiteURL string
     Dependencies []string
     Tags []string
-    InstallStrategies []game.InstallStrategies
+    InstallStrategies []game.InstallStrategy
     ExtraData []string
 }
 

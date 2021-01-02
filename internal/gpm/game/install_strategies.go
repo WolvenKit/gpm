@@ -6,7 +6,7 @@
 
 package game
 
-type installStrategies struct {
+type InstallStrategy struct {
 	Identifier       string
 	DisplayName      string
 	InstallationPath string
@@ -17,7 +17,7 @@ const (
 	rar = ".rar"
 )
 
-var InstallStrategies = []installStrategies{
+var InstallStrategies = []InstallStrategy{
 	{
 		Identifier:       "CET",
 		DisplayName:      "Cyberpunk Engine Tweaks",

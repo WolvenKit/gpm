@@ -32,31 +32,29 @@ func downloadCommand() *cli.Command {
 }
 
 // Downloads mod from the Mod Registry
-func DownloadMod(url string, installDirectory string, identifier string) error {
+func DownloadMod(url string, downloadDir string, identifier string, fileType string) (error, string) {
 	response, err := http.Get(url)
 	if err != nil {
-		return err
+		return err, ""
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode != 200 {
-		return errors.New("Received non 200 response code")
+		return errors.New("Received non 200 response code"), ""
 	}
 
-	p := filepath.FromSlash(fmt.Sprintf("%s/%s", os.TempDir(), identifier))
-	// Create a empty file in OS' native TMP
+	p := filepath.FromSlash(fmt.Sprintf("%s/%s%s", downloadDir, identifier, fileType))
 	file, err := os.Create(p)
 	if err != nil {
-		return err
+		return err, ""
 	}
 	defer file.Close()
 
 	// Write the response's bytes to the file
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
-		return err
+		return err, ""
 	}
 
-	return nil
+	return nil, p
 }
-

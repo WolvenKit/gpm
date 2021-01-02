@@ -7,20 +7,24 @@
 package commands
 
 import (
-    "path/filepath"
+    "fmt"
     "github.com/mholt/archiver"
+    "path/filepath"
 )
 
-func InstallMod(archivePath string, installPath string) {
+func InstallMod(archivePath string, installPath string, identifier string) string {
     archivePath = filepath.FromSlash(archivePath)
     installPath = filepath.FromSlash(installPath)
 
-    unarchive(archivePath, installPath)
+    unarchive(archivePath, installPath, identifier)
+
+    mod := filepath.FromSlash(fmt.Sprintf("%s/%s", installPath, identifier))
+    return mod
 }
 
 
-func unarchive(archivePath string, installPath string) error{
-    err := archiver.Unarchive(archivePath, installPath)
+func unarchive(archivePath string, installPath string, identifier string) error{
+    err := archiver.Extract(archivePath, fmt.Sprintf("mods/%s", identifier), installPath)
     if err != nil {
         return err
     }

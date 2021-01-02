@@ -9,12 +9,17 @@ lint: ## Lint the project
 	go fmt
 
 build: ## Build the project
-	go get
 	go build
 
 install: ## Build & Install as a binary to the PATH
-	go get
 	go install
+
+release: ## Creates Linux and Windows binaries
+	go build
+	GOOS=windows GOARCH=amd64 go build
+	mkdir build/
+	zip build/release.zip gpm.exe gpm
+
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sed 's/Makefile://' | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

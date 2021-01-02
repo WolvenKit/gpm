@@ -1,5 +1,7 @@
 ### gpm ###
 /cmd/gpm/gpm
+/gpm
+/build/
 
 ### Go ###
 # Binaries for programs and plugins

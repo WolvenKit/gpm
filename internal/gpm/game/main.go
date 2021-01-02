@@ -7,7 +7,10 @@
 package game
 
 type Game struct {
-    GameName string
+    Identifier string
+    DisplayName string
+    Versions []string
+    InstallStrategies []InstallStrategies
 }
 
 type InstallStrategies struct {

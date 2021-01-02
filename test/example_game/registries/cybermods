@@ -1,5 +1,6 @@
 identifier = "cybermods"
 display_name = "Cybermods"
-website_url = "https://cybermods.net/"
-base_url = "https://cybermods.net/package/download/"
+base_url = "https://cybermods.net/"
+download_endpoint = "package/download/"
+latest_version_endpoint = ""
 file_types = ["zip"]

@@ -11,5 +11,5 @@ type Game struct {
     DisplayName string
     Versions []string
     InstallStrategies []InstallStrategies
-    ModRegistries []ModRegistries
+    ModRegistries []ModRegistry
 }

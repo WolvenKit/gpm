@@ -12,7 +12,7 @@ import (
 )
 
 var NAME = "gpm"
-var VERSION = "poc"
+var VERSION = "0.0.0"
 
 func InitCLI() *cli.App {
 	app := entrypoint.NewApp()

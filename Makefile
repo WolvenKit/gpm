@@ -1,6 +1,6 @@
  DIR := ${CURDIR}
 .DEFAULT_GOAL := help
-.PHONY: test lint
+.PHONY: test lint build install
 
 test: ## Test the project
 	cd test && go test -v
@@ -9,9 +9,11 @@ lint: ## Lint the project
 	go fmt
 
 build: ## Build the project
+	go get
 	go build
 
 install: ## Build & Install as a binary to the PATH
+	go get
 	go install
 
 help: ## Show this help

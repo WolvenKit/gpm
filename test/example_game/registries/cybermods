@@ -1,0 +1,5 @@
+identifier = "cybermods"
+display_name = "Cybermods"
+website_url = "https://cybermods.net/"
+base_url = "https://cybermods.net/package/download/"
+file_types = ["zip"]

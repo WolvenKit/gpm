@@ -6,3 +6,24 @@
 
 package mod
 
+import 	"github.com/WolvenKit/gpm/internal/gpm/game"
+
+type Mod struct {
+    Creator string
+    Identifier string
+    Version string
+    DisplayName string
+    Description string
+    License string
+    WebsiteURL string
+    Dependencies []string
+    Tags []string
+    InstallStrategies []game.InstallStrategies
+    ExtraData []string
+}
+
+func InitMod() Mod{
+    m := Mod{}
+
+    return m
+}

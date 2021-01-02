@@ -9,3 +9,6 @@ require (
 )
 
 replace github.com/WolvenKit/gpm/internal/gpm/cli => ./internal/gpm/cli
+replace github.com/WolvenKit/gpm/internal/gpm/game => ./internal/gpm/game
+replace github.com/WolvenKit/gpm/internal/gpm/mod => ./internal/gpm/mod
+

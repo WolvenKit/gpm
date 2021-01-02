@@ -7,11 +7,12 @@
 package test
 
 import (
-	"testing"
+    "github.com/WolvenKit/gpm/internal/gpm/mod"
+    "testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTrue(t *testing.T) {
-	assert.True(t, true)
+
+func DownloadMod(t *testing.T) {
 }

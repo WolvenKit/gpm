@@ -6,3 +6,23 @@
 
 package game
 
+type Game struct {
+    GameName string
+}
+
+type InstallStrategies struct {
+    Name string
+    ModRegistries []ModRegistries
+}
+
+const (
+    zip = ".zip"
+    rar = ".rar"
+)
+
+type ModRegistries struct {
+    Name string
+    WebsiteURL string
+    BaseURL string
+    FileTypes []string
+}

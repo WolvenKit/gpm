@@ -9,14 +9,13 @@ lint: ## Lint the project
 	go fmt
 
 build: ## Build the project
-	go build
+	GOOS=linux GOARCH=amd64 go build -o build/gpm
+	GOOS=windows GOARCH=amd64 go build  -o build/gpm.exe
 
 install: ## Build & Install as a binary to the PATH
-	go install
+	GOOS=linux GOARCH=amd64 go install
 
-release: ## Creates Linux and Windows binaries
-	go build -o build/gpm
-	GOOS=windows GOARCH=amd64 go build  -o build/gpm.exe
+release: build ## Creates Linux and Windows binaries
 	mkdir -p build/
 	zip build/release.zip build/gpm.exe build/gpm
 

@@ -8,7 +8,7 @@ package test
 
 import (
     "fmt"
-    "github.com/WolvenKit/gpm/internal/gpm/commands"
+    "github.com/WolvenKit/gpm/cmd"
     "github.com/stretchr/testify/assert"
     "io/ioutil"
     "log"
@@ -40,8 +40,8 @@ func TestDownloadMod(t *testing.T) {
     fileType := ".zip"
 
 
-    _, archivePath := commands.DownloadMod(url, tmp, identifier, fileType)
-    mod := commands.InstallMod(archivePath, tmp, identifier)
+    _, archivePath := cmd.DownloadMod(url, tmp, identifier, fileType)
+    mod := cmd.InstallMod(archivePath, tmp, identifier)
 
     assert.DirExists(t, mod)
 }

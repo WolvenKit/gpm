@@ -4,10 +4,10 @@
  Licensed under the GNU Affero General Public License v3.0 (the "License").
 */
 
-package commands
+package cmd
 
 import (
-	"errors"
+    "errors"
 	"fmt"
 	"github.com/urfave/cli/v2"
 	"io"

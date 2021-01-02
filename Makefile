@@ -15,10 +15,10 @@ install: ## Build & Install as a binary to the PATH
 	go install
 
 release: ## Creates Linux and Windows binaries
-	go build
-	GOOS=windows GOARCH=amd64 go build
-	mkdir build/
-	zip build/release.zip gpm.exe gpm
+	go build -o build/gpm
+	GOOS=windows GOARCH=amd64 go build  -o build/gpm.exe
+	mkdir -p build/
+	zip build/release.zip build/gpm.exe build/gpm
 
 
 help: ## Show this help

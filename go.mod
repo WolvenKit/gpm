@@ -15,6 +15,8 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/ulikunitz/xz v0.5.9 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
+	go.uber.org/multierr v1.6.0 // indirect
+	go.uber.org/zap v1.16.0 // indirect
 )
 
 replace github.com/WolvenKit/gpm/internal/gpm/game => ./internal/gpm/game

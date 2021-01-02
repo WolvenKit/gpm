@@ -6,13 +6,21 @@
 
 package game
 
-type InstallStrategies struct {
-    Identifier string
-    DisplayName string
-    InstallationPath string
+type installStrategies struct {
+	Identifier       string
+	DisplayName      string
+	InstallationPath string
 }
 
 const (
-    zip = ".zip"
-    rar = ".rar"
+	zip = ".zip"
+	rar = ".rar"
 )
+
+var InstallStrategies = []installStrategies{
+	{
+		Identifier:       "CET",
+		DisplayName:      "Cyberpunk Engine Tweaks",
+		InstallationPath: "bin/x64/plugins/cyber_engine_tweaks/mods/",
+	},
+}

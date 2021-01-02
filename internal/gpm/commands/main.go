@@ -6,31 +6,3 @@
 
 package commands
 
-import (
-    "github.com/gruntwork-io/gruntwork-cli/entrypoint"
-    "github.com/urfave/cli/v2"
-)
-
-var NAME = "gpm"
-var VERSION = "0.0.0"
-
-func InitCLI() *cli.App {
-	app := entrypoint.NewApp()
-
-	app.Name = NAME
-	app.Authors = []*cli.Author{
-		{
-			Name: "osulli",
-		},
-	}
-
-	app.Version = VERSION
-    app.HideHelp = false
-
-	app.EnableBashCompletion = true
-
-	app.Commands = []*cli.Command{versionCommand()}
-
-	return app
-}
-

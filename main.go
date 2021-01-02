@@ -12,24 +12,47 @@ import (
 	"time"
 )
 
+const VERSION = "0.0.0"
+
+var AUTHORS = []*cli.Author{
+	{Name: "osulli", Email: "https://github.com/osulli"},
+}
+
+var COMMANDS = []*cli.Command{
+	versionCommand(VERSION),
+}
+
 func main() {
 	app := &cli.App{
-		Name:        "gpm",
-		Version:     "0.0.0",
-		HelpName:    "help",
-		Description: "A game agnostic mod manager",
-		Authors: []*cli.Author{
-			{Name: "osulli"},
-		},
-		Commands:               nil,
+		Name:                   "gpm",
+		Version:                VERSION,
+		HelpName:               "help",
+		Usage:                  "A game agnostic mod manager",
+		Authors:                AUTHORS,
+		Commands:               COMMANDS,
+		Compiled:               time.Time{},
+		Copyright:              "Copyright (c) 2020 - 2021 the WolvenKit contributors.\n   Licensed under the GNU Affero General Public License v3.0 (the \"License\").",
+		UseShortOptionHandling: true,
 		EnableBashCompletion:   true,
 		HideHelp:               false,
 		Action:                 nil,
 		CommandNotFound:        nil,
 		OnUsageError:           nil,
-		Compiled:               time.Time{},
-		Copyright:              "Copyright (c) 2020 - 2021 the WolvenKit contributors.\n   Licensed under the GNU Affero General Public License v3.0 (the \"License\").",
-		UseShortOptionHandling: true,
 	}
 	app.Run(os.Args)
+}
+
+func versionCommand(version string) *cli.Command {
+	command := cli.Command{
+		Name:     "Version",
+		Aliases:  []string{"v", "--version", "-v", "version"},
+		Usage:    "Print the application version",
+		Category: "help",
+		Action: func(context *cli.Context) error {
+			println(VERSION)
+			return nil
+		},
+	}
+
+	return &command
 }

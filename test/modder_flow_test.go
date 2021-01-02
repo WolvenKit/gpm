@@ -6,13 +6,10 @@
 
 package test
 
-import (
-    "github.com/WolvenKit/gpm/internal/gpm/mod"
-    "testing"
+import "testing"
 
-	"github.com/stretchr/testify/assert"
-)
+func InitMod(t *testing.T) {
+}
 
-
-func DownloadMod(t *testing.T) {
+func PublishMod(t *testing.T) {
 }

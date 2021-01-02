@@ -9,26 +9,19 @@ package cmd
 import (
     "errors"
 	"fmt"
-	"github.com/urfave/cli/v2"
+    "github.com/spf13/cobra"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 )
 
-func downloadCommand() *cli.Command {
-	command := cli.Command{
-		Name:     "Download",
-		Aliases:  []string{"d", "--download", "-d"},
-		Usage:    "Download the specified mod",
-		Category: "Download",
-		Action: func(context *cli.Context) error {
-			//DownloadMod()
-			return nil
-		},
-	}
-
-	return &command
+var downloadCmd = &cobra.Command{
+    Use:   "download",
+    Short: "Download the specified mod",
+    Run: func(cmd *cobra.Command, args []string) {
+        DownloadMod("","","","")
+    },
 }
 
 // Downloads mod from the Mod Registry

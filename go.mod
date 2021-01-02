@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/WolvenKit/gpm/internal/gpm/commands v0.0.0
-	github.com/WolvenKit/gpm/internal/gpm/mod v0.0.0 // indirect
+	github.com/WolvenKit/gpm/internal/gpm/mod v0.0.0
 	github.com/urfave/cli/v2 v2.3.0
 )
 

@@ -13,28 +13,13 @@
 package cmd
 
 import (
-	"fmt"
-	"github.com/mholt/archiver"
-	"go.uber.org/zap"
-	"path/filepath"
+	"github.com/spf13/cobra"
 )
 
-func InstallMod(logger *zap.SugaredLogger, archivePath string, installPath string, identifier string) string {
-	archivePath = filepath.FromSlash(archivePath)
-	installPath = filepath.FromSlash(installPath)
-
-	logger.Debugf("Unarchiving mods/%s directory from %s to %s", identifier, archivePath, installPath)
-	unarchive(archivePath, installPath, identifier)
-
-	mod := filepath.FromSlash(fmt.Sprintf("%s/%s", installPath, identifier))
-	return mod
-}
-
-func unarchive(archivePath string, installPath string, identifier string) error {
-	err := archiver.Extract(archivePath, fmt.Sprintf("mods/%s", identifier), installPath)
-	if err != nil {
-		return err
-	}
-
-	return nil
+var installCmd = &cobra.Command{
+	Use:   "install",
+	Short: "Install the specified mod",
+	Run: func(cmd *cobra.Command, args []string) {
+		//InstallMod("","","","")
+	},
 }

@@ -12,8 +12,12 @@
 
 package cmd
 
-type Input struct {
-	Url        string
-	Identifier string
-	FileType   string
+import "github.com/spf13/cobra"
+
+var describeCmd = &cobra.Command{
+	Use:   "describe",
+	Short: "Describe the specified mod",
+	Run: func(cmd *cobra.Command, args []string) {
+		//DescribeMod("","","","")
+	},
 }

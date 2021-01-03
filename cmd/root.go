@@ -54,6 +54,8 @@ func init() {
 	// Define sub-commands
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(downloadCmd)
+	rootCmd.AddCommand(installCmd)
+	rootCmd.AddCommand(describeCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.

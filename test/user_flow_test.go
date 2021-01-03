@@ -43,17 +43,19 @@ func TestReadModConfiguration(t *testing.T) {
 	m.ReadModConfiguration()
 	logger.Debug(m.Creator)
 
-	assert.Equal(t, "WolvenKit", m.Creator)
-	assert.Equal(t, "braindance-protocol", m.Identifier)
-	assert.Equal(t, "0.0.0", m.Version)
-	assert.Equal(t, "Braindance Protocol", m.DisplayName)
-	assert.Equal(t, "A collection of LUA scripts to modify your Cyberpunk 2077 experience", m.Description)
-	assert.Equal(t, "GNU v3", m.License)
-	assert.Equal(t, "https://github.com/WolvenKit/BraindanceProtocol/", m.WebsiteURL)
-	assert.Equal(t, []string{""}, m.Dependencies)
-	assert.Equal(t, []string{""}, m.Tags)
-	assert.Equal(t, []string{"CET"}, m.InstallStrategies)
-	assert.Equal(t, []string{""}, m.ExtraData)
+	assert.Equal(t, mod.Mod{
+		Creator:           "WolvenKit",
+		Identifier:        "braindance-protocol",
+		Version:           "0.0.0",
+		DisplayName:       "Braindance Protocol",
+		Description:       "A collection of LUA scripts to modify your Cyberpunk 2077 experience",
+		License:           "GNU v3",
+		WebsiteURL:        "https://github.com/WolvenKit/BraindanceProtocol/",
+		Dependencies:      []string{""},
+		Tags:              []string{""},
+		InstallStrategies: []string{"CET"},
+		ExtraData:         []string{""},
+	}, m)
 }
 
 //// Tests mod Install follows install strategy

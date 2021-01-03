@@ -19,7 +19,7 @@ import (
 )
 
 var downloadCmd = &cobra.Command{
-	Use:   "download",
+	Use:   "download [IDENTIFIER] [URL]",
 	Short: "Download the specified mod",
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {

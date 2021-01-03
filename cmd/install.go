@@ -17,9 +17,14 @@ import (
 )
 
 var installCmd = &cobra.Command{
-	Use:   "install",
+	Use:   "install [IDENTIFIER]",
 	Short: "Install the specified mod",
+	Args:  cobra.MinimumNArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
-		//InstallMod("","","","")
+		InstallMod(args[0])
 	},
+}
+
+func InstallMod(identifier string) {
+	// Get mod data from gpm data file using the identifier
 }

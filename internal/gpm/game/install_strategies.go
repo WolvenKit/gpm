@@ -17,16 +17,3 @@ type InstallStrategy struct {
 	DisplayName      string
 	InstallationPath string
 }
-
-const (
-	zip = ".zip"
-	rar = ".rar"
-)
-
-var InstallStrategies = []InstallStrategy{
-	{
-		Identifier:       "CET",
-		DisplayName:      "Cyberpunk Engine Tweaks",
-		InstallationPath: "bin/x64/plugins/cyber_engine_tweaks/mods/",
-	},
-}

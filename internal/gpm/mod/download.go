@@ -43,20 +43,23 @@ func (m *Mod) Download(logger *zap.SugaredLogger, downloadDir string, input *Dow
     }
 
     p := filepath.FromSlash(fmt.Sprintf("%s/%s%s", downloadDir, input.Identifier, input.FileType))
-    logger.Debugf("Saving archive to %s", p)
+    logger.Debugf("Creating archive at %s", p)
     file, err := os.Create(p)
     if err != nil {
+        logger.Errorf(err.Error())
         return err
     }
     defer file.Close()
 
+    logger.Debugf("Saving archive data to %s", file.Name())
     _, err = io.Copy(file, response.Body)
     if err != nil {
+        logger.Errorf(err.Error())
         return err
     }
-    logger.Debugf("Archive saved at %s", file.Name())
+    logger.Debugf("Archive data saved at %s", file.Name())
 
-    m.Directories.ArchiveDirectory = file.Name()
+    m.Directories.ArchivePath = file.Name()
 
     return nil
 }

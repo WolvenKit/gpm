@@ -13,21 +13,20 @@
 package test
 
 import (
-	"github.com/WolvenKit/gpm/cmd"
-	"github.com/WolvenKit/gpm/internal/gpm/mod"
-	"github.com/stretchr/testify/assert"
-	"testing"
+    "github.com/WolvenKit/gpm/internal/gpm/mod"
+    "github.com/stretchr/testify/assert"
+    "testing"
 )
 
 // User flow
 /*
-    User downloads mod to $downloadPath
-    User unpacks mod archive into $downloadPath/tmp/
-    GPM reads mods manifest in $downloadPath/tmp/$archiveName/manifest.toml
-    User install mod from $downloadPath/tmp/$archiveName/**
-    User enables mod
-    User disables mod
-    User uninstalls mod
+   User downloads mod to $downloadPath
+   User unpacks mod archive into $downloadPath/tmp/
+   GPM reads mods manifest in $downloadPath/tmp/$archiveName/manifest.toml
+   User install mod from $downloadPath/tmp/$archiveName/**
+   User enables mod
+   User disables mod
+   User uninstalls mod
 */
 
 // Test downloads go to desired directory
@@ -35,23 +34,28 @@ func TestDownloadMod(t *testing.T) {
 	tmp := createSandbox(true)
 	logger := initLogging()
 
+	m := mod.InitMod(logger)
+
 	// Mock user CLI input
-	i := new(cmd.Input)
+	i := new(mod.DownloadInput)
 	i.Url = "https://cybermods.net/package/download/osulli/BraindanceProtocol/0.4.0/"
 	i.Identifier = "braindance_protocol"
 	i.FileType = ".zip"
 
-	_, archivePath := cmd.DownloadMod(logger, tmp, i)
+	// Download Mod
+	m.Download(logger, tmp, i)
 
-	assert.FileExists(t, archivePath)
+	// Assert the mod archive was downloaded into the correct path
+	assert.FileExists(t, m.Directories.ArchivePath)
 }
 
 // Tests mod Configuration is read correctly
 func TestReadModConfiguration(t *testing.T) {
 	logger := initLogging()
 
-	m := mod.InitMod(logger, "mocks/example_cet_mod")
-	m.ReadModConfiguration()
+	m := mod.InitMod(logger)
+	m.Directories.InstallDirectory = "mocks/example_cet_mod"
+	m.ReadModConfiguration(logger)
 	logger.Debug(m.Creator)
 
 	assert.Equal(t, mod.Mod{
@@ -64,20 +68,27 @@ func TestReadModConfiguration(t *testing.T) {
 		WebsiteURL:        "https://github.com/WolvenKit/BraindanceProtocol/",
 		Dependencies:      []string{""},
 		Tags:              []string{""},
-		InstallStrategies: []string{"CET"},
+		//InstallStrategies: []string{"CET"},
 		ExtraData:         []string{""},
 	}, m)
 }
 
 //// Tests mod Install follows install strategy
-//func TestInstallMod(t *testing.T){
-//  tmp := createSandbox(false)
-//  logger := initLogging()
+//func TestInstallMod(t *testing.T) {
+//	tmp := createSandbox(true)
+//	logger := initLogging()
 //
-//  // commands.GetConfiguration("cyberpunk", "cybermods", "braindance-protocol", "0.0.0")
-//  mod := cmd.InstallMod(logger, archivePath, tmp, identifier)
-//  assert.DirExists(t, mod)
+//	m := mod.InitMod(logger, "mocks/example_cet_mod")
+//	m.ReadModConfiguration()
+//
+//	mod := cmd.InstallMod(logger, "mocks/example_cet_mod.rar", tmp, m.Identifier)
+//	assert.DirExists(t, mod)
 //}
+
+// Ensure scenario where mod manifest has missing keys is handled
+func ModManifestMissingKeys() {
+	// Checks CET not existing handled etc.
+}
 
 // Ensure scenario where mod archive cannot be found is handled
 func UnarchiveMissingArchive() {

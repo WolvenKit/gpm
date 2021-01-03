@@ -13,14 +13,13 @@
 package mod
 
 import (
-    "fmt"
-    "github.com/spf13/viper"
+    "github.com/WolvenKit/gpm/internal/gpm/game"
     "go.uber.org/zap"
 )
 
 type Mod struct {
-    Directory string
-    Creator string
+    Directories ModDirectories
+    Creator          string
     Identifier string
     Version string
     DisplayName string
@@ -29,36 +28,23 @@ type Mod struct {
     WebsiteURL string
     Dependencies []string
     Tags []string
-    InstallStrategies []string
+    InstallStrategies []game.InstallStrategy
     ExtraData []string
 }
 
-func InitMod(logger *zap.SugaredLogger, directory string) *Mod {
-    viper.AddConfigPath(directory)
-    viper.SetConfigName("manifest")
-    viper.SetConfigType("toml")
+// Key locations for the mod's files
+type ModDirectories struct {
+    InstallDirectory   string
+    ArchivePath        string
+    TemporaryDirectory string
+}
 
-    err := viper.ReadInConfig()
-    if err != nil {
-        panic(fmt.Errorf("Fatal error config file: %s \n", err))
-    }
-
+func InitMod(logger *zap.SugaredLogger) *Mod {
     m := new(Mod)
-    m.Directory = directory
     return m
 }
 
-func (m *Mod) ReadModConfiguration()  {
-    m.Creator = viper.GetString("creator")
-    m.Identifier = viper.GetString("identifier")
-    m.Version = viper.GetString("version")
-    m.DisplayName = viper.GetString("display_name")
-    m.Description = viper.GetString("description")
-    m.License = viper.GetString("license")
-    m.WebsiteURL = viper.GetString("website_url")
-    m.Dependencies = viper.GetStringSlice("dependencies")
-    m.Tags = viper.GetStringSlice("tags")
-    m.InstallStrategies = viper.GetStringSlice("install_strategies")
-    m.ExtraData = viper.GetStringSlice("extra_data")
+// Updates central mod log
+func (m *Mod) UpdateModLog()  {
+    // TODO - establish convention / large manifest file thing that stores all mod data from `m *Mod`
 }
-

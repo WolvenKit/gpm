@@ -49,7 +49,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	// Define flags and configuration settings.
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gpm.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gpm.toml)")
 
 	// Define sub-commands
 	rootCmd.AddCommand(versionCmd)
@@ -74,7 +74,8 @@ func initConfig() {
 		// Search config in home directory with name ".gpm" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigName(".gpm")
-	}
+        viper.SetConfigType(".toml")
+    }
 
 	viper.AutomaticEnv() // read in environment variables that match
 

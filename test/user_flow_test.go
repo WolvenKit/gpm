@@ -13,12 +13,12 @@
 package test
 
 import (
-    "fmt"
-    "github.com/WolvenKit/gpm/internal/gpm/game"
-    "github.com/WolvenKit/gpm/internal/gpm/mod"
-    "github.com/stretchr/testify/assert"
-    "os"
-    "testing"
+	"fmt"
+	"github.com/WolvenKit/gpm/internal/gpm/game"
+	"github.com/WolvenKit/gpm/internal/gpm/mod"
+	"github.com/stretchr/testify/assert"
+	"os"
+	"testing"
 )
 
 // User flow
@@ -35,7 +35,7 @@ import (
 // Test downloads go to desired directory
 func TestDownloadMod(t *testing.T) {
 	tmp := createSandbox()
-    defer os.RemoveAll(tmp)
+	defer os.RemoveAll(tmp)
 
 	logger := initLogging()
 
@@ -61,7 +61,7 @@ func TestReadModConfiguration(t *testing.T) {
 	m := mod.InitMod(logger)
 	// Simulate an already installed mod with a set InstallDirectory
 	m.Directories.InstallDirectory = "mocks/example_cet_mod"
-    m.ReadModConfiguration(logger, m.Directories.InstallDirectory)
+	m.ReadModConfiguration(logger, m.Directories.InstallDirectory)
 
 	assert.Equal(t, mod.ModDirectories{
 		InstallDirectory:   "mocks/example_cet_mod",
@@ -83,27 +83,26 @@ func TestReadModConfiguration(t *testing.T) {
 
 // Tests mod Install follows install strategy
 func TestInstallMod(t *testing.T) {
-   tmp := createSandbox()
-   os.MkdirAll(fmt.Sprintf("%s/Games/Cyberpunk 2077/bin/x64/plugins/cyber_engine_tweaks/mods/", tmp), 0777)
-   defer os.RemoveAll(tmp)
+	tmp := createSandbox()
+	os.MkdirAll(fmt.Sprintf("%s/Games/Cyberpunk 2077/bin/x64/plugins/cyber_engine_tweaks/mods/", tmp), 0777)
+	defer os.RemoveAll(tmp)
 
-   logger := initLogging()
+	logger := initLogging()
 
+	g := game.InitGame(logger)
+	g.Directories.GameRoot = fmt.Sprintf("%s/Games/Cyberpunk 2077", tmp)
+	m := mod.InitMod(logger)
 
-    g := game.InitGame(logger)
-    g.Directories.GameRoot = fmt.Sprintf("%s/Games/Cyberpunk 2077", tmp)
-    m := mod.InitMod(logger)
+	// Simulate a downloaded mod archive, with the manifest extracted
+	m.Directories.TemporaryDirectory = tmp
+	m.Directories.ArchivePath = "mocks/example_cet_mod.rar"
 
-    // Simulate a downloaded mod archive, with the manifest extracted
-    m.Directories.TemporaryDirectory = tmp
-    m.Directories.ArchivePath = "mocks/example_cet_mod.rar"
-
-    m.ReadModConfiguration(logger, m.Directories.TemporaryDirectory)
+	m.ReadModConfiguration(logger, m.Directories.TemporaryDirectory)
 
 	m.Install(logger, g)
 	assert.DirExists(t, m.Directories.InstallDirectory)
 
-    assert.FileExists(t, fmt.Sprintf("%s/mods/%s/init.lua", m.Directories.InstallDirectory, m.Identifier))
+	assert.FileExists(t, fmt.Sprintf("%s/mods/%s/init.lua", m.Directories.InstallDirectory, m.Identifier))
 }
 
 // Ensure scenario where mod manifest has missing keys is handled

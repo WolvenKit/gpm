@@ -13,12 +13,12 @@
 package cmd
 
 import (
-    "fmt"
-    "github.com/spf13/cobra"
-    "os"
+	"fmt"
+	"github.com/spf13/cobra"
+	"os"
 
-    homedir "github.com/mitchellh/go-homedir"
-    "github.com/spf13/viper"
+	homedir "github.com/mitchellh/go-homedir"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -75,10 +75,10 @@ func initConfig() {
 
 		// Search config in home directory with name ".gpm" (without extension).
 		viper.AddConfigPath(home)
-        viper.AddConfigPath(".")
+		viper.AddConfigPath(".")
 		viper.SetConfigName(".gpm")
-        viper.SetConfigType("toml")
-    }
+		viper.SetConfigType("toml")
+	}
 
 	viper.AutomaticEnv() // read in environment variables that match
 

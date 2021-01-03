@@ -13,11 +13,11 @@
 package test
 
 import (
-    "fmt"
-    "go.uber.org/zap"
-    "io/ioutil"
-    "log"
-    "path/filepath"
+	"fmt"
+	"go.uber.org/zap"
+	"io/ioutil"
+	"log"
+	"path/filepath"
 )
 
 func initLogging() *zap.SugaredLogger {

@@ -13,34 +13,32 @@
 package cmd
 
 import (
-    "github.com/WolvenKit/gpm/internal/gpm/mod"
-    "github.com/spf13/cobra"
-    "github.com/spf13/viper"
+	"github.com/WolvenKit/gpm/internal/gpm/mod"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var downloadCmd = &cobra.Command{
-    Use:   "download",
-    Short: "Download the specified mod",
-    Args: cobra.MinimumNArgs(2),
-    Run: func(cmd *cobra.Command, args []string) {
-       DownloadMod(args[0], args[1])
-    },
+	Use:   "download",
+	Short: "Download the specified mod",
+	Args:  cobra.MinimumNArgs(2),
+	Run: func(cmd *cobra.Command, args []string) {
+		DownloadMod(args[0], args[1])
+	},
 }
 
 func DownloadMod(identifier string, url string) {
-    // TODO - toggle the 'game', not just CP77
-    cpp := viper.GetString("cyberpunk_path")
+	// TODO - toggle the 'game', not just CP77
+	cpp := viper.GetString("cyberpunk_path")
 
-    logger := InitLogger()
-    m := mod.InitMod(logger)
+	logger := InitLogger()
+	m := mod.InitMod(logger)
 
-    logger.Debug(viper.GetViper())
+	logger.Debug(viper.GetViper())
 
-    i := new(mod.DownloadInput)
-    i.Identifier = identifier
-    i.Url = url
+	i := new(mod.DownloadInput)
+	i.Identifier = identifier
+	i.Url = url
 
-    m.Download(logger, cpp, i)
+	m.Download(logger, cpp, i)
 }
-
-

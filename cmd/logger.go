@@ -15,11 +15,11 @@ package cmd
 import "go.uber.org/zap"
 
 // Hacky as a new logger is created for each command run
-func InitLogger() *zap.SugaredLogger{
-    // Setup Logger
-    logger, _ := zap.NewDevelopment()
-    //logger, _ := zap.NewProduction()
-    defer logger.Sync() // flushes buffer, if any
-    sugar := logger.Sugar()
-    return sugar
+func InitLogger() *zap.SugaredLogger {
+	// Setup Logger
+	logger, _ := zap.NewDevelopment()
+	//logger, _ := zap.NewProduction()
+	defer logger.Sync() // flushes buffer, if any
+	sugar := logger.Sugar()
+	return sugar
 }

@@ -13,9 +13,9 @@
 package main
 
 import (
-    "github.com/WolvenKit/gpm/cmd"
+	"github.com/WolvenKit/gpm/cmd"
 )
 
 func main() {
-    cmd.Execute()
+	cmd.Execute()
 }

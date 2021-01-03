@@ -19,6 +19,17 @@ import (
 	"testing"
 )
 
+// User flow
+/*
+    User downloads mod to $downloadPath
+    User unpacks mod archive into $downloadPath/tmp/
+    GPM reads mods manifest in $downloadPath/tmp/$archiveName/manifest.toml
+    User install mod from $downloadPath/tmp/$archiveName/**
+    User enables mod
+    User disables mod
+    User uninstalls mod
+*/
+
 // Test downloads go to desired directory
 func TestDownloadMod(t *testing.T) {
 	tmp := createSandbox(true)

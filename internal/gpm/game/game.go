@@ -13,9 +13,9 @@
 package game
 
 type Game struct {
-    Identifier string
-    DisplayName string
-    Versions []string
-    InstallStrategies []InstallStrategies
-    ModRegistries []ModRegistry
+	Identifier        string
+	DisplayName       string
+	Versions          []string
+	InstallStrategies []InstallStrategy
+	ModRegistries     []ModRegistry
 }

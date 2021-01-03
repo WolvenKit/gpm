@@ -13,8 +13,11 @@
 package test
 
 import (
+    "fmt"
+    "github.com/WolvenKit/gpm/internal/gpm/game"
     "github.com/WolvenKit/gpm/internal/gpm/mod"
     "github.com/stretchr/testify/assert"
+    "os"
     "testing"
 )
 
@@ -31,7 +34,9 @@ import (
 
 // Test downloads go to desired directory
 func TestDownloadMod(t *testing.T) {
-	tmp := createSandbox(true)
+	tmp := createSandbox()
+    defer os.RemoveAll(tmp)
+
 	logger := initLogging()
 
 	m := mod.InitMod(logger)
@@ -40,7 +45,7 @@ func TestDownloadMod(t *testing.T) {
 	i := new(mod.DownloadInput)
 	i.Url = "https://cybermods.net/package/download/osulli/BraindanceProtocol/0.4.0/"
 	i.Identifier = "braindance_protocol"
-	i.FileType = ".zip"
+	i.FileType = ""
 
 	// Download Mod
 	m.Download(logger, tmp, i)
@@ -54,36 +59,52 @@ func TestReadModConfiguration(t *testing.T) {
 	logger := initLogging()
 
 	m := mod.InitMod(logger)
+	// Simulate an already installed mod with a set InstallDirectory
 	m.Directories.InstallDirectory = "mocks/example_cet_mod"
-	m.ReadModConfiguration(logger)
-	logger.Debug(m.Creator)
+    m.ReadModConfiguration(logger, m.Directories.InstallDirectory)
 
-	assert.Equal(t, mod.Mod{
-		Creator:           "WolvenKit",
-		Identifier:        "braindance-protocol",
-		Version:           "0.0.0",
-		DisplayName:       "Braindance Protocol",
-		Description:       "A collection of LUA scripts to modify your Cyberpunk 2077 experience",
-		License:           "GNU v3",
-		WebsiteURL:        "https://github.com/WolvenKit/BraindanceProtocol/",
-		Dependencies:      []string{""},
-		Tags:              []string{""},
-		//InstallStrategies: []string{"CET"},
-		ExtraData:         []string{""},
-	}, m)
+	assert.Equal(t, mod.ModDirectories{
+		InstallDirectory:   "mocks/example_cet_mod",
+		ArchivePath:        "",
+		TemporaryDirectory: "",
+	}, m.Directories)
+	assert.Equal(t, "WolvenKit", m.Creator)
+	assert.Equal(t, "braindance_protocol", m.Identifier)
+	assert.Equal(t, "0.0.0", m.Version)
+	assert.Equal(t, "Braindance Protocol", m.DisplayName)
+	assert.Equal(t, "A collection of LUA scripts to modify your Cyberpunk 2077 experience", m.Description)
+	assert.Equal(t, "GNU v3", m.License)
+	assert.Equal(t, "https://github.com/WolvenKit/BraindanceProtocol/", m.WebsiteURL)
+	assert.Equal(t, []string(nil), m.Dependencies)
+	assert.Equal(t, []string(nil), m.Tags)
+	assert.Equal(t, []game.InstallStrategy([]game.InstallStrategy(nil)), m.InstallStrategies)
+	assert.Equal(t, []string(nil), m.ExtraData)
 }
 
-//// Tests mod Install follows install strategy
-//func TestInstallMod(t *testing.T) {
-//	tmp := createSandbox(true)
-//	logger := initLogging()
-//
-//	m := mod.InitMod(logger, "mocks/example_cet_mod")
-//	m.ReadModConfiguration()
-//
-//	mod := cmd.InstallMod(logger, "mocks/example_cet_mod.rar", tmp, m.Identifier)
-//	assert.DirExists(t, mod)
-//}
+// Tests mod Install follows install strategy
+func TestInstallMod(t *testing.T) {
+   tmp := createSandbox()
+   os.MkdirAll(fmt.Sprintf("%s/Games/Cyberpunk 2077/bin/x64/plugins/cyber_engine_tweaks/mods/", tmp), 0777)
+   defer os.RemoveAll(tmp)
+
+   logger := initLogging()
+
+
+    g := game.InitGame(logger)
+    g.Directories.GameRoot = fmt.Sprintf("%s/Games/Cyberpunk 2077", tmp)
+    m := mod.InitMod(logger)
+
+    // Simulate a downloaded mod archive, with the manifest extracted
+    m.Directories.TemporaryDirectory = tmp
+    m.Directories.ArchivePath = "mocks/example_cet_mod.rar"
+
+    m.ReadModConfiguration(logger, m.Directories.TemporaryDirectory)
+
+	m.Install(logger, g)
+	assert.DirExists(t, m.Directories.InstallDirectory)
+
+    assert.FileExists(t, fmt.Sprintf("%s/mods/%s/init.lua", m.Directories.InstallDirectory, m.Identifier))
+}
 
 // Ensure scenario where mod manifest has missing keys is handled
 func ModManifestMissingKeys() {

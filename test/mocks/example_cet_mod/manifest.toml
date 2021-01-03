@@ -1,11 +1,11 @@
 creator = "WolvenKit"
-identifier = "braindance-protocol"
+identifier = "braindance_protocol"
 Version = "0.0.0"
 display_name = "Braindance Protocol"
 description = "A collection of LUA scripts to modify your Cyberpunk 2077 experience"
 license = "GNU v3"
 website_url = "https://github.com/WolvenKit/BraindanceProtocol/"
-dependencies = [""]
-tags = [""]
+#dependencies = [""]
+#tags = [""]
 install_strategies = ["CET"]
-extra_data = [""]
+#extra_data = [""]

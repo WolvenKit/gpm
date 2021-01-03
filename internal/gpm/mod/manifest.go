@@ -18,12 +18,16 @@ import (
 )
 
 // Read the mod's manifest.toml
-func (m *Mod) ReadModConfiguration(logger *zap.SugaredLogger)  {
-    logger.Debugf("Processing manifest.toml in %s", m.Directories.InstallDirectory)
+func (m *Mod) ReadModConfiguration(logger *zap.SugaredLogger, manifestDirectory string)  {
+    logger.Debugf("Processing manifest.toml in %s", manifestDirectory)
 
-    viper.AddConfigPath(m.Directories.InstallDirectory)
+    viper.AddConfigPath(manifestDirectory)
     viper.SetConfigName("manifest")
     viper.SetConfigType("toml")
+    err := viper.ReadInConfig() // Find and read the config file
+    if err != nil { // Handle errors reading the config file
+        logger.Errorf("Fatal error config file: %s \n", err)
+    }
 
     m.Creator = viper.GetString("creator")
     m.Identifier = viper.GetString("identifier")

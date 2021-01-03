@@ -12,10 +12,22 @@
 
 package game
 
+import "go.uber.org/zap"
+
 type Game struct {
+    Directories       Directories
 	Identifier        string
 	DisplayName       string
 	Versions          []string
 	InstallStrategies []InstallStrategy
 	ModRegistries     []ModRegistry
+}
+
+type Directories struct {
+    GameRoot string
+}
+
+func InitGame(logger *zap.SugaredLogger) *Game {
+    g := new(Game)
+    return g
 }

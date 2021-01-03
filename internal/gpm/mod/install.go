@@ -16,22 +16,21 @@ import (
 	"fmt"
 	"github.com/WolvenKit/gpm/internal/gpm/game"
 	"github.com/mholt/archiver"
-	"github.com/spf13/viper"
+    "github.com/spf13/viper"
 	"go.uber.org/zap"
-	"path/filepath"
+    "path/filepath"
 )
 
-func (m *Mod) Install(logger *zap.SugaredLogger, directories ModDirectories) error {
+func (m *Mod) Install(logger *zap.SugaredLogger, g *game.Game) error {
 	// Extract the manifest.toml from the archive
 	extractManifest(logger, m)
 
 	// Process the extracted manifest.toml before installation
 	viper.AddConfigPath(m.Directories.TemporaryDirectory)
-	m.ReadModConfiguration(logger)
-	logger.Debug(m)
+	m.ReadModConfiguration(logger, m.Directories.TemporaryDirectory)
 
 	// Get the InstallPath from the InstallStrategy
-	processInstallStrategy(logger, m)
+	processInstallStrategy(logger, m, g)
 
 	// Extract and Install the entire mod according to the manifest
 	unarchiveMod(logger, m)
@@ -41,10 +40,15 @@ func (m *Mod) Install(logger *zap.SugaredLogger, directories ModDirectories) err
 
 // Extract the manifest.toml into the ArchivePath as manifest.toml
 func extractManifest(logger *zap.SugaredLogger, m *Mod) error {
-	d := filepath.FromSlash(fmt.Sprintf("%s/%s", m.Directories.ArchivePath, "manifest.toml"))
-	err := archiver.Extract(m.Directories.ArchivePath, "manifest.toml", d)
+	d := filepath.FromSlash(fmt.Sprintf("%s", m.Directories.TemporaryDirectory))
+
+    logger.Debugf("Extracting %s/manifest.toml into %s", m.Directories.TemporaryDirectory, d)
+
+    err := archiver.Extract(m.Directories.ArchivePath, "manifest.toml", d)
 	if err != nil {
-		return err
+	    // TODO - Shouldn't handle the Fatal in here
+        logger.Fatal(err)
+        return err
 	}
 
 	return nil
@@ -52,17 +56,20 @@ func extractManifest(logger *zap.SugaredLogger, m *Mod) error {
 
 // Extract the mods/ directory into the InstallDirectory
 func unarchiveMod(logger *zap.SugaredLogger, m *Mod) error {
-	p := filepath.FromSlash(fmt.Sprintf("mods/%s", m.Identifier))
+	p := filepath.FromSlash(fmt.Sprintf("mods/"))
+
+	logger.Debugf("Extracting %s/%s into %s", m.Directories.ArchivePath, p, m.Directories.InstallDirectory)
 
 	err := archiver.Extract(m.Directories.ArchivePath, p, m.Directories.InstallDirectory)
 	if err != nil {
+	    logger.Error(err)
 		return err
 	}
 	return nil
 }
 
 // Process the InstallStrategy defined in manifest.toml
-func processInstallStrategy(logger *zap.SugaredLogger, m *Mod) error {
+func processInstallStrategy(logger *zap.SugaredLogger, m *Mod, g *game.Game) error {
 	/*
 			   TODO - process multiple strategies once InstallStrategy doc completed
 			   How will we handle multiple install strategies as proposed?
@@ -73,13 +80,13 @@ func processInstallStrategy(logger *zap.SugaredLogger, m *Mod) error {
 	is := new(game.InstallStrategy)
 	is.Identifier = "CET"
 	is.DisplayName = "Cyberpunk Engine Tweaks"
-	is.InstallationPath = "bin/x64/plugins/cyber_engine_tweaks/mods/"
+	is.InstallationPath = "bin/x64/plugins/cyber_engine_tweaks"
 
 	// Set the mod's strategies to mocked strategy instead of what is in the mod's manifest.toml
 	m.InstallStrategies = []game.InstallStrategy{*is}
 
 	// Now process the strategy
-	p := filepath.FromSlash(fmt.Sprintf("%s/%s/%s", viper.GetString("cyberpunk_path"), m.InstallStrategies[0].InstallationPath, m.Identifier))
+	p := filepath.FromSlash(fmt.Sprintf("%s/%s", g.Directories.GameRoot, m.InstallStrategies[0].InstallationPath))
 	logger.Debugf("Install Directory set to: %s", p)
 	m.Directories.InstallDirectory = p
 

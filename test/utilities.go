@@ -13,12 +13,11 @@
 package test
 
 import (
-	"fmt"
-	"go.uber.org/zap"
-	"io/ioutil"
-	"log"
-	"os"
-	"path/filepath"
+    "fmt"
+    "go.uber.org/zap"
+    "io/ioutil"
+    "log"
+    "path/filepath"
 )
 
 func initLogging() *zap.SugaredLogger {
@@ -28,16 +27,12 @@ func initLogging() *zap.SugaredLogger {
 	return sugar
 }
 
-func createSandbox(cleanup bool) string {
+func createSandbox() string {
 	dir, err := ioutil.TempDir("", "test-")
 	if err != nil {
 		log.Fatal(err)
 	}
 	dir = filepath.FromSlash(fmt.Sprintf(dir))
-
-	if cleanup {
-		defer os.RemoveAll(dir)
-	}
 
 	return dir
 }

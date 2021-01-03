@@ -13,13 +13,7 @@
 package cmd
 
 import (
-	"fmt"
-	"github.com/spf13/cobra"
-	"go.uber.org/zap"
-	"io"
-	"net/http"
-	"os"
-	"path/filepath"
+    "github.com/spf13/cobra"
 )
 
 var downloadCmd = &cobra.Command{
@@ -30,32 +24,3 @@ var downloadCmd = &cobra.Command{
 	},
 }
 
-// Downloads mod from the Mod Registry
-func DownloadMod(logger *zap.SugaredLogger, downloadDir string, input *Input) (error, string) {
-	logger.Debugf("Downloading %s%s from %s", input.Identifier, input.FileType, input.Url)
-	response, err := http.Get(input.Url)
-	if err != nil {
-		return err, ""
-	}
-	defer response.Body.Close()
-
-	if response.StatusCode != 200 {
-		logger.Errorf("Received response code %s", response.StatusCode)
-	}
-
-	p := filepath.FromSlash(fmt.Sprintf("%s/%s%s", downloadDir, input.Identifier, input.FileType))
-	logger.Debugf("Saving archive to %s", p)
-	file, err := os.Create(p)
-	if err != nil {
-		return err, ""
-	}
-	defer file.Close()
-
-	_, err = io.Copy(file, response.Body)
-	if err != nil {
-		return err, ""
-	}
-	logger.Debugf("Archive saved at %s", file.Name())
-
-	return nil, p
-}

@@ -52,8 +52,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.gpm.yaml)")
 
 	// Define sub-commands
-    rootCmd.AddCommand(versionCmd)
-    rootCmd.AddCommand(downloadCmd)
+	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(downloadCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.

@@ -28,6 +28,7 @@ var downloadCmd = &cobra.Command{
 }
 
 func DownloadMod(identifier string, url string) {
+    // TODO - toggle the 'game', not just CP77
     cpp := viper.GetString("cyberpunk_path")
 
     logger := InitLogger()

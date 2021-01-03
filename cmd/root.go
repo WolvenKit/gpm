@@ -75,6 +75,7 @@ func initConfig() {
 
 		// Search config in home directory with name ".gpm" (without extension).
 		viper.AddConfigPath(home)
+        viper.AddConfigPath(".")
 		viper.SetConfigName(".gpm")
         viper.SetConfigType("toml")
     }

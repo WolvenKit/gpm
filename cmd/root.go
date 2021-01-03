@@ -13,15 +13,17 @@
 package cmd
 
 import (
-	"fmt"
-	"github.com/spf13/cobra"
-	"os"
+    "fmt"
+    "github.com/spf13/cobra"
+    "os"
 
-	homedir "github.com/mitchellh/go-homedir"
-	"github.com/spf13/viper"
+    homedir "github.com/mitchellh/go-homedir"
+    "github.com/spf13/viper"
 )
 
-var cfgFile string
+var (
+	cfgFile string
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{

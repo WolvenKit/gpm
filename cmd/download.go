@@ -13,13 +13,33 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
+    "github.com/WolvenKit/gpm/internal/gpm/mod"
+    "github.com/spf13/cobra"
+    "github.com/spf13/viper"
 )
 
 var downloadCmd = &cobra.Command{
-	Use:   "download",
-	Short: "Download the specified mod",
-	Run: func(cmd *cobra.Command, args []string) {
-		//DownloadMod("","","","")
-	},
+    Use:   "download",
+    Short: "Download the specified mod",
+    Args: cobra.MinimumNArgs(2),
+    Run: func(cmd *cobra.Command, args []string) {
+       DownloadMod(args[0], args[1])
+    },
 }
+
+func DownloadMod(identifier string, url string) {
+    cpp := viper.GetString("cyberpunk_path")
+
+    logger := InitLogger()
+    m := mod.InitMod(logger)
+
+    logger.Debug(viper.GetViper())
+
+    i := new(mod.DownloadInput)
+    i.Identifier = identifier
+    i.Url = url
+
+    m.Download(logger, cpp, i)
+}
+
+

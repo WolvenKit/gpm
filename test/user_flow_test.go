@@ -21,7 +21,7 @@ import (
 
 // Test downloads go to desired directory
 func TestDownloadMod(t *testing.T) {
-	tmp := createSandbox(false)
+	tmp := createSandbox(true)
 	logger := initLogging()
 
 	// Mock user CLI input

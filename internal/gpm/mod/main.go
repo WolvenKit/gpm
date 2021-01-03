@@ -19,6 +19,7 @@ import (
 )
 
 type Mod struct {
+    Directory string
     Creator string
     Identifier string
     Version string
@@ -43,6 +44,7 @@ func InitMod(logger *zap.SugaredLogger, directory string) *Mod {
     }
 
     m := new(Mod)
+    m.Directory = directory
     return m
 }
 

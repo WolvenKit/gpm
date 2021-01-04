@@ -3,6 +3,7 @@ module github.com/WolvenKit/gpm
 go 1.15
 
 require (
+	github.com/WolvenKit/gpm/internal/gpm/config v0.0.0-00010101000000-000000000000
 	github.com/WolvenKit/gpm/internal/gpm/game v0.0.0-00010101000000-000000000000
 	github.com/WolvenKit/gpm/internal/gpm/mod v0.0.0-00010101000000-000000000000
 	github.com/dsnet/compress v0.0.1 // indirect
@@ -12,6 +13,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nwaples/rardecode v1.1.0 // indirect
 	github.com/pierrec/lz4 v2.6.0+incompatible // indirect
+	github.com/spf13/cast v1.3.0
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.6.1
@@ -22,5 +24,9 @@ require (
 )
 
 replace github.com/WolvenKit/gpm/internal/gpm/game => ./internal/gpm/game
+
+replace github.com/WolvenKit/gpm/internal/gpm/logging => ./internal/gpm/logging
+
+replace github.com/WolvenKit/gpm/internal/gpm/config => ./internal/gpm/config
 
 replace github.com/WolvenKit/gpm/internal/gpm/mod => ./internal/gpm/mod

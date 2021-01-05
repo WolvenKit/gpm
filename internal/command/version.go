@@ -10,7 +10,7 @@
  limitations under the License.
 */
 
-package cmd
+package command
 
 import (
 	"fmt"

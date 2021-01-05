@@ -10,21 +10,21 @@
  limitations under the License.
 */
 
-package cmd
+package command
 
 import (
+	"fmt"
+	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-var installCmd = &cobra.Command{
-	Use:   "install [IDENTIFIER]",
-	Short: "Install the specified mod",
-	Args:  cobra.MinimumNArgs(3),
+var configCmd = &cobra.Command{
+	Use:   "config",
+	Short: "Describe gpm's loaded config",
 	Run: func(cmd *cobra.Command, args []string) {
-		InstallMod(args[0])
+		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		println(fmt.Sprintf("Cyberpunk Path: %s", viper.GetString("cyberpunk_path")))
+		println(fmt.Sprintf("Development Mode: %s", cast.ToString(viper.GetBool("development"))))
 	},
-}
-
-func InstallMod(identifier string) {
-	// Get mod data from gpm data file using the identifier
 }

@@ -16,6 +16,7 @@ builds:
       goarch:
           - amd64
           - 386
+      main: ./cmd/gpm
 archives:
     - replacements:
           darwin: Darwin

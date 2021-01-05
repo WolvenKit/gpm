@@ -20,4 +20,3 @@ require (
 	go.uber.org/zap v1.16.0
 )
 
-replace github.com/WolvenKit/gpm => github.com/cfi2017/gpm v0.0.0-20201221100129-a553463c7bab

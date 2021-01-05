@@ -3,9 +3,6 @@ module github.com/WolvenKit/gpm
 go 1.15
 
 require (
-	github.com/WolvenKit/gpm/internal/gpm/config v0.0.0-00010101000000-000000000000
-	github.com/WolvenKit/gpm/internal/gpm/game v0.0.0-00010101000000-000000000000
-	github.com/WolvenKit/gpm/internal/gpm/mod v0.0.0-00010101000000-000000000000
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/frankban/quicktest v1.11.3 // indirect
 	github.com/golang/snappy v0.0.2 // indirect
@@ -23,10 +20,4 @@ require (
 	go.uber.org/zap v1.16.0
 )
 
-replace github.com/WolvenKit/gpm/internal/gpm/game => ./internal/gpm/game
-
-replace github.com/WolvenKit/gpm/internal/gpm/logging => ./internal/gpm/logging
-
-replace github.com/WolvenKit/gpm/internal/gpm/config => ./internal/gpm/config
-
-replace github.com/WolvenKit/gpm/internal/gpm/mod => ./internal/gpm/mod
+replace github.com/WolvenKit/gpm => github.com/cfi2017/gpm v0.0.0-20201221100129-a553463c7bab

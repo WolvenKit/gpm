@@ -13,38 +13,38 @@
 package mod
 
 import (
-    "github.com/WolvenKit/gpm/internal/gpm/game"
-    "go.uber.org/zap"
+	"github.com/WolvenKit/gpm/internal/gpm/game"
+	"go.uber.org/zap"
 )
 
 type Mod struct {
-    Directories ModDirectories
-    Creator          string
-    Identifier string
-    Version string
-    DisplayName string
-    Description string
-    License string
-    WebsiteURL string
-    Dependencies []string
-    Tags []string
-    InstallStrategies []game.InstallStrategy
-    ExtraData []string
+	Directories       ModDirectories
+	Creator           string
+	Identifier        string
+	Version           string
+	DisplayName       string
+	Description       string
+	License           string
+	WebsiteURL        string
+	Dependencies      []string
+	Tags              []string
+	InstallStrategies []game.InstallStrategy
+	ExtraData         []string
 }
 
 // Key locations for the mod's files
 type ModDirectories struct {
-    InstallDirectory   string
-    ArchivePath        string
-    TemporaryDirectory string
+	InstallDirectory   string
+	ArchivePath        string
+	TemporaryDirectory string
 }
 
 func InitMod(logger *zap.SugaredLogger) *Mod {
-    m := new(Mod)
-    return m
+	m := new(Mod)
+	return m
 }
 
 // Updates central mod log
-func (m *Mod) UpdateModLog()  {
-    // TODO - establish convention / large manifest file thing that stores all mod data from `m *Mod`
+func (m *Mod) UpdateModLog() {
+	// TODO - establish convention / large manifest file thing that stores all mod data from `m *Mod`
 }

@@ -10,10 +10,11 @@
  limitations under the License.
 */
 
-package cmd
+package command
 
 import (
 	"github.com/WolvenKit/gpm/internal/gpm/mod"
+	"github.com/WolvenKit/gpm/internal/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -31,7 +32,7 @@ func DownloadMod(identifier string, url string) {
 	// TODO - toggle the 'game', not just CP77
 	cpp := viper.GetString("cyberpunk_path")
 
-	logger := InitLogger()
+	logger := log.GetLogger()
 	m := mod.InitMod(logger)
 
 	logger.Debug(viper.GetViper())
@@ -40,5 +41,8 @@ func DownloadMod(identifier string, url string) {
 	i.Identifier = identifier
 	i.Url = url
 
-	m.Download(logger, cpp, i)
+	err := m.Download(logger, cpp, i)
+	if err != nil {
+		logger.Fatal(err)
+	}
 }

@@ -10,29 +10,32 @@
  limitations under the License.
 */
 
-package logging
+package log
 
 import (
-    "github.com/spf13/viper"
-    "go.uber.org/zap"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 var logger *zap.Logger
 
 func init() {
-    development := viper.GetBool("development")
-    if development {
-        logger, _ = zap.NewDevelopment()
-    } else {
-        logger, _ = zap.NewProduction()
-    }
+	development := viper.GetBool("development")
+	if development {
+		logger, _ = zap.NewDevelopment()
+	} else {
+		logger, _ = zap.NewProduction()
+	}
 }
 
 func GetLogger() *zap.SugaredLogger {
-    sugar := logger.Sugar()
-    return sugar
+	sugar := logger.Sugar()
+	return sugar
 }
 
 func Flush() {
-    logger.Sync()
+	err := logger.Sync()
+	if err != nil {
+		panic(err)
+	}
 }

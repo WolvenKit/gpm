@@ -16,39 +16,45 @@ import (
 	"fmt"
 	"github.com/WolvenKit/gpm/internal/gpm/game"
 	"github.com/mholt/archiver"
-    "github.com/spf13/viper"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
-    "path/filepath"
+	"path/filepath"
 )
 
 func (m *Mod) Install(logger *zap.SugaredLogger, g *game.Game) error {
 	// Extract the manifest.toml from the archive
-	extractManifest(logger, m)
+	err := extractManifest(logger, m)
+	if err != nil {
+		return err
+	}
 
 	// Process the extracted manifest.toml before installation
 	viper.AddConfigPath(m.Directories.TemporaryDirectory)
 	m.ReadModConfiguration(logger, m.Directories.TemporaryDirectory)
 
 	// Get the InstallPath from the InstallStrategy
-	processInstallStrategy(logger, m, g)
+	err = processInstallStrategy(logger, m, g)
+	if err != nil {
+		return err
+	}
 
 	// Extract and Install the entire mod according to the manifest
-	unarchiveMod(logger, m)
+	err = unarchiveMod(logger, m)
 
-	return nil
+	return err
 }
 
 // Extract the manifest.toml into the ArchivePath as manifest.toml
 func extractManifest(logger *zap.SugaredLogger, m *Mod) error {
-	d := filepath.FromSlash(fmt.Sprintf("%s", m.Directories.TemporaryDirectory))
+	d := filepath.FromSlash(m.Directories.TemporaryDirectory)
 
-    logger.Debugf("Extracting %s/manifest.toml into %s", m.Directories.TemporaryDirectory, d)
+	logger.Debugf("Extracting %s/manifest.toml into %s", m.Directories.TemporaryDirectory, d)
 
-    err := archiver.Extract(m.Directories.ArchivePath, "manifest.toml", d)
+	err := archiver.Extract(m.Directories.ArchivePath, "manifest.toml", d)
 	if err != nil {
-	    // TODO - Shouldn't handle the Fatal in here
-        logger.Fatal(err)
-        return err
+		// TODO - Shouldn't handle the Fatal in here
+		logger.Fatal(err)
+		return err
 	}
 
 	return nil
@@ -56,13 +62,13 @@ func extractManifest(logger *zap.SugaredLogger, m *Mod) error {
 
 // Extract the mods/ directory into the InstallDirectory
 func unarchiveMod(logger *zap.SugaredLogger, m *Mod) error {
-	p := filepath.FromSlash(fmt.Sprintf("mods/"))
+	p := filepath.FromSlash("mods/")
 
 	logger.Debugf("Extracting %s/%s into %s", m.Directories.ArchivePath, p, m.Directories.InstallDirectory)
 
 	err := archiver.Extract(m.Directories.ArchivePath, p, m.Directories.InstallDirectory)
 	if err != nil {
-	    logger.Error(err)
+		logger.Error(err)
 		return err
 	}
 	return nil

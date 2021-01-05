@@ -13,53 +13,53 @@
 package mod
 
 import (
-    "fmt"
-    "go.uber.org/zap"
-    "io"
-    "net/http"
-    "os"
-    "path/filepath"
+	"fmt"
+	"go.uber.org/zap"
+	"io"
+	"net/http"
+	"os"
+	"path/filepath"
 )
 
 // TODO: Deprecate FileType (Does archiver need a file extension?) (Can we get the file name with http.Get ?)
 // gpm download https://mods.net/001 braindance-protocol zip
 type DownloadInput struct {
-    Url        string
-    Identifier string
-    FileType   string
+	Url        string
+	Identifier string
+	FileType   string
 }
 
-func (m *Mod) Download(logger *zap.SugaredLogger, downloadDir string, input *DownloadInput) error{
-    logger.Debugf("Downloading %s%s from %s", input.Identifier, input.FileType, input.Url)
+func (m *Mod) Download(logger *zap.SugaredLogger, downloadDir string, input *DownloadInput) error {
+	logger.Debugf("Downloading %s%s from %s", input.Identifier, input.FileType, input.Url)
+	response, err := http.Get(input.Url)
 
-    response, err := http.Get(input.Url)
-    if err != nil {
-        return err
-    }
-    defer response.Body.Close()
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
 
-    if response.StatusCode != 200 {
-        logger.Errorf("Received response code whilst downloading a mod: %s", response.StatusCode)
-    }
+	if response.StatusCode != 200 {
+		logger.Errorf("Received response code whilst downloading a mod: %d", response.StatusCode)
+	}
 
-    p := filepath.FromSlash(fmt.Sprintf("%s/%s%s", downloadDir, input.Identifier, input.FileType))
-    logger.Debugf("Creating archive at %s", p)
-    file, err := os.Create(p)
-    if err != nil {
-        logger.Errorf(err.Error())
-        return err
-    }
-    defer file.Close()
+	p := filepath.FromSlash(fmt.Sprintf("%s/%s%s", downloadDir, input.Identifier, input.FileType))
+	logger.Debugf("Creating archive at %s", p)
+	file, err := os.Create(p)
+	if err != nil {
+		logger.Errorf(err.Error())
+		return err
+	}
+	defer file.Close()
 
-    logger.Debugf("Saving archive data to %s", file.Name())
-    _, err = io.Copy(file, response.Body)
-    if err != nil {
-        logger.Errorf(err.Error())
-        return err
-    }
-    logger.Debugf("Archive data saved at %s", file.Name())
+	logger.Debugf("Saving archive data to %s", file.Name())
+	_, err = io.Copy(file, response.Body)
+	if err != nil {
+		logger.Errorf(err.Error())
+		return err
+	}
+	logger.Debugf("Archive data saved at %s", file.Name())
 
-    m.Directories.ArchivePath = file.Name()
+	m.Directories.ArchivePath = file.Name()
 
-    return nil
+	return nil
 }

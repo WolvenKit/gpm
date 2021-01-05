@@ -14,8 +14,8 @@ package test
 
 import "testing"
 
-func InitMod(t *testing.T) {
+func TestInitMod(t *testing.T) {
 }
 
-func PublishMod(t *testing.T) {
+func TestPublishMod(t *testing.T) {
 }

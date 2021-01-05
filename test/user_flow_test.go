@@ -48,7 +48,10 @@ func TestDownloadMod(t *testing.T) {
 	i.FileType = ""
 
 	// Download Mod
-	m.Download(logger, tmp, i)
+	err := m.Download(logger, tmp, i)
+	if err != nil {
+		panic(err)
+	}
 
 	// Assert the mod archive was downloaded into the correct path
 	assert.FileExists(t, m.Directories.ArchivePath)
@@ -84,7 +87,10 @@ func TestReadModConfiguration(t *testing.T) {
 // Tests mod Install follows install strategy
 func TestInstallMod(t *testing.T) {
 	tmp := createSandbox()
-	os.MkdirAll(fmt.Sprintf("%s/Games/Cyberpunk 2077/bin/x64/plugins/cyber_engine_tweaks/mods/", tmp), 0777)
+	err := os.MkdirAll(fmt.Sprintf("%s/Games/Cyberpunk 2077/bin/x64/plugins/cyber_engine_tweaks/mods/", tmp), 0777)
+	if err != nil {
+		panic(err)
+	}
 	defer os.RemoveAll(tmp)
 
 	logger := initLogging()
@@ -99,35 +105,35 @@ func TestInstallMod(t *testing.T) {
 
 	m.ReadModConfiguration(logger, m.Directories.TemporaryDirectory)
 
-	m.Install(logger, g)
+	err = m.Install(logger, g)
+	if err != nil {
+		panic(err)
+	}
 	assert.DirExists(t, m.Directories.InstallDirectory)
 
 	assert.FileExists(t, fmt.Sprintf("%s/mods/%s/init.lua", m.Directories.InstallDirectory, m.Identifier))
 }
 
 // Ensure scenario where mod manifest has missing keys is handled
-func ModManifestMissingKeys() {
+func TestModManifestMissingKeys(t *testing.T) {
 	// Checks CET not existing handled etc.
 }
 
 // Ensure scenario where mod archive cannot be found is handled
-func UnarchiveMissingArchive() {
+func TestUnarchiveMissingArchive(t *testing.T) {
 	// Checks CET not existing handled etc.
 }
 
 // Ensure scenario is handled if required directories do not exist
-func InstallToInvalidDirectory() {
+func TestInstallToInvalidDirectory(t *testing.T) {
 	// Checks CET not existing handled etc.
 }
 
-func InstallMod(t *testing.T) {
+func TestUninstallMod(t *testing.T) {
 }
 
-func UninstallMod(t *testing.T) {
+func TestEnableMod(t *testing.T) {
 }
 
-func EnableMod(t *testing.T) {
-}
-
-func DisableMod(t *testing.T) {
+func TestDisableMod(t *testing.T) {
 }

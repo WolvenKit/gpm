@@ -13,7 +13,6 @@
 package test
 
 import (
-	"fmt"
 	"go.uber.org/zap"
 	"io/ioutil"
 	"log"
@@ -22,7 +21,12 @@ import (
 
 func initLogging() *zap.SugaredLogger {
 	logger, _ := zap.NewDevelopment()
-	defer logger.Sync() // flushes buffer, if any
+	defer func() {
+		err := logger.Sync()
+		if err != nil {
+			panic(err)
+		}
+	}() // flushes buffer, if any
 	sugar := logger.Sugar()
 	return sugar
 }
@@ -32,7 +36,7 @@ func createSandbox() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	dir = filepath.FromSlash(fmt.Sprintf(dir))
+	dir = filepath.FromSlash(dir)
 
 	return dir
 }

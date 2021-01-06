@@ -2,7 +2,7 @@ name: static check
 on:
   push:
     tags:
-      - "v*"
+      - "*"
     branches:
       - "**"
   pull_request:

@@ -59,7 +59,7 @@ func init() {
 	rootCmd.AddCommand(installCmd)
 	rootCmd.AddCommand(describeCmd)
 	rootCmd.AddCommand(configCmd)
-	rootCmd.AddCommand(completionsCmd)
+	rootCmd.AddCommand(completionCmd)
 }
 
 func initConfig() {

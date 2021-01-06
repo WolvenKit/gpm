@@ -12,13 +12,13 @@ var completionCmd = &cobra.Command{
 
 Bash:
 
-$ source <(yourprogram completion bash)
+$ source <(gpm completion bash)
 
 # To load completions for each session, execute once:
 Linux:
-  $ yourprogram completion bash > /etc/bash_completion.d/yourprogram
+  $ gpm completion bash > /etc/bash_completion.d/gpm
 MacOS:
-  $ yourprogram completion bash > /usr/local/etc/bash_completion.d/yourprogram
+  $ gpm completion bash > /usr/local/etc/bash_completion.d/gpm
 
 Zsh:
 
@@ -28,23 +28,23 @@ Zsh:
 $ echo "autoload -U compinit; compinit" >> ~/.zshrc
 
 # To load completions for each session, execute once:
-$ yourprogram completion zsh > "${fpath[1]}/_yourprogram"
+$ gpm completion zsh > "${fpath[1]}/_gpm"
 
 # You will need to start a new shell for this setup to take effect.
 
 Fish:
 
-$ yourprogram completion fish | source
+$ gpm completion fish | source
 
 # To load completions for each session, execute once:
-$ yourprogram completion fish > ~/.config/fish/completions/yourprogram.fish
+$ gpm completion fish > ~/.config/fish/completions/gpm.fish
 
 Powershell:
 
-PS> yourprogram completion powershell | Out-String | Invoke-Expression
+PS> gpm completion powershell | Out-String | Invoke-Expression
 
 # To load completions for every new session, run:
-PS> yourprogram completion powershell > yourprogram.ps1
+PS> gpm completion powershell > gpm.ps1
 # and source this file from your powershell profile.
 `,
 	DisableFlagsInUseLine: true,

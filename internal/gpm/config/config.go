@@ -47,7 +47,10 @@ func InitialiseConfig() {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// Config file not found; ignore error if desired
 			// TODO - I suspect this error would produce an empty file name as empty string
-			fmt.Println("No config file found:", viper.ConfigFileUsed())
+			_, err = fmt.Fprintln(os.Stderr, "No config file found:", viper.ConfigFileUsed())
+			if err != nil {
+				panic(err)
+			}
 		} else {
 			// Config file was found but another error was produced
 			panic(err)
